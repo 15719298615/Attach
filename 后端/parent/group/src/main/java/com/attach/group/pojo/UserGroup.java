@@ -1,6 +1,8 @@
 package com.attach.group.pojo;
 
-public class UserGroup {
+import java.io.Serializable;
+
+public class UserGroup implements Serializable {
     private Integer id;
 
     private Integer groupId;

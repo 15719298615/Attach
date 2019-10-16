@@ -1,8 +1,9 @@
 package com.attach.group.pojo;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class UserDayTask {
+public class UserDayTask implements Serializable {
     private Integer id;
 
     private Integer taskId;

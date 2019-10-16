@@ -1,6 +1,8 @@
 package com.attach.group.pojo;
 
-public class Task {
+import java.io.Serializable;
+
+public class Task implements Serializable {
     private Integer id;
 
     private Integer groupId;
