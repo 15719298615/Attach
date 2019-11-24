@@ -114,9 +114,12 @@ public class UserLearnServiceImpl implements UserLearnService {
         String date=sdf.format(new Date());
 
         DayLearningTimeExample dayLearningTimeExample=new DayLearningTimeExample();
-        dayLearningTimeExample.createCriteria().andUserIdEqualTo(userId).andTodayEqualTo(date);
+        dayLearningTimeExample.createCriteria().andUserIdEqualTo(userId).andTodayEqualTo(date);   //只会返回今天的一个数据
         List<DayLearningTime> dayLearningTimes = dayLearningTimeMapper.selectByExample(dayLearningTimeExample);
-        Integer id = dayLearningTimes.get(0).getId();
+        Integer id=null;
+        if(dayLearningTimes.size()>0 && dayLearningTimes!=null){
+            id = dayLearningTimes.get(0).getId();
+        }
 
 
         UserLearnExample userLearnExample=new UserLearnExample();
@@ -127,44 +130,41 @@ public class UserLearnServiceImpl implements UserLearnService {
             for(UserLearn u:userLearns){
                 //开始时间不为空   结束时间为空    开始时间要小于当前时间    需要往结束时间放入当前时间
                 if(u.getEndTime()==null && u.getStartTime()!=null && u.getStartTime()<currentTime){
-//                    UserLearnExample userLearnExample1=new UserLearnExample();
-//                    UserLearnExample.Criteria criteria1= userLearnExample.createCriteria().andUserIdEqualTo(userId);
-//                    if(userLearnExample1!=null){
-                        UserLearn userLearn=new UserLearn();
-                        //更新要更新哪一行，得知道id
-                        userLearn.setId(u.getId());
-                        userLearn.setUserId(userId);
-                        userLearn.setStartTime(u.getStartTime());
-                        userLearn.setEndTime(currentTime);
-                        int i = userLearnMapper.updateByExample(userLearn, userLearnExample);
-                        if(i>0 ) {
-                            if(dayLearningTimes.size()>0 && dayLearningTimes!=null){       //不是第一次，就得到时间加上原来的时间并且更新。
-
-                                        Integer time = dayLearningTimes.get(0).getTime();
-                                        time+=(int)( currentTime-u.getStartTime())/1000;
-                                        dayLearningTime.setId(id);
-                                        dayLearningTime.setUserId(userId);
-                                        dayLearningTime.setTime(time);
-                                        dayLearningTime.setToday(date);
-                                        int update = dayLearningTimeMapper.updateByExample(dayLearningTime, dayLearningTimeExample);
-                                        if(update>0){
-                                            return JsonUtils.objectToJson("success");   //更新成功
-                                        }
-                            }else{                //今天第一次插入
-                                dayLearningTime.setUserId(userId);
-                                dayLearningTime.setToday(date);
-                                dayLearningTime.setTime((int)( currentTime-u.getStartTime())/1000);
-                                int insert = dayLearningTimeMapper.insert(dayLearningTime);
-                                if(insert>0){
-                                    return JsonUtils.objectToJson("success");   //更新成功
-                                }
-                           }
-                        }else {
-                            return JsonUtils.objectToJson("fail");     //更新失败
+                    UserLearn userLearn=new UserLearn();
+                    //更新要更新哪一行，得知道id
+                    userLearn.setId(u.getId());
+                    userLearn.setUserId(userId);
+                    userLearn.setStartTime(u.getStartTime());
+                    userLearn.setEndTime(currentTime);
+//                      int i = userLearnMapper.updateByExample(userLearn, userLearnExample);
+                    int i = userLearnMapper.updateByPrimaryKey(userLearn);
+                    if(i>0 ) {//更新成功,开始更新今天的学习时间
+                        if(dayLearningTimes.size()>0 && dayLearningTimes!=null){       //不是第一次，就得到时间加上原来的时间并且更新。
+                            Integer time = dayLearningTimes.get(0).getTime();
+                            String today = dayLearningTimes.get(0).getToday();
+                            time+=(int)( currentTime-u.getStartTime())/1000;
+                            dayLearningTime.setId(id);
+                            dayLearningTime.setUserId(userId);
+                            dayLearningTime.setTime(time);
+                            dayLearningTime.setToday(today);
+                            int update = dayLearningTimeMapper.updateByExample(dayLearningTime, dayLearningTimeExample);
+                            if(update>0){
+                                return JsonUtils.objectToJson("success");   //更新成功
+                            }
+                            break;
+                        }else{                //今天第一次插入,不用插入id
+                            dayLearningTime.setUserId(userId);
+                            dayLearningTime.setToday(date);
+                            dayLearningTime.setTime((int)( currentTime-u.getStartTime())/1000);
+                            int insert = dayLearningTimeMapper.insert(dayLearningTime);
+                            if(insert>0){
+                                return JsonUtils.objectToJson("success");   //更新成功
+                            }
+                            break;
                         }
-//                    }else {
-//                        return JsonUtils.objectToJson("status:[fail]");     //没有得到
-//                    }
+                    }else {
+                        return JsonUtils.objectToJson("fail");     //更新失败
+                    }
                 }
             }
             return JsonUtils.objectToJson("fail");     //没找到符合条件的
@@ -297,8 +297,8 @@ public class UserLearnServiceImpl implements UserLearnService {
                         all+=d.getTime();
                     }
                 }
+                average_learned_time=((double)all/day_learned_time_list.length);
             }
-            average_learned_time=((double)all/day_learned_time_list.length);
 
             //求打败人数百分比
             int number=0;
@@ -351,12 +351,18 @@ public class UserLearnServiceImpl implements UserLearnService {
             }
             //求打败百分比
             int many=0;
-            for(Double d:allIdRate){
-                if(average_learned_time>d){
-                    many++;
+            if(allIdRate!=null && allIdRate.length>0){
+                for(Double d:allIdRate){
+                    if(average_learned_time==0.0){
+                        beat_people_percent=0.0;
+                    }else{
+                        if(average_learned_time>d){
+                            many++;
+                        }
+                    }
                 }
+                beat_people_percent=(many/(double)(allIdRate.length));
             }
-            beat_people_percent=(many/(double)(allIdRate.length));
 
             learnResult.setAverage_learned_time(average_learned_time);
             learnResult.setBeat_people_percent(beat_people_percent);

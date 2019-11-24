@@ -43,8 +43,8 @@ com\attach\sign_in\pojo\ParticipateExample.class
 com\attach\sign_in\pojo\UserExample$Criteria.class
 com\attach\group\commons\pojo\CreateGroup.class
 com\attach\group\pojo\Groups.class
-com\attach\sign_in\pojo\StatisticsExample$GeneratedCriteria.class
 com\attach\sign_in\pojo\UserExample$GeneratedCriteria.class
+com\attach\sign_in\pojo\StatisticsExample$GeneratedCriteria.class
 com\attach\sign_in\pojo\UserSignIn.class
 com\attach\learn\service\UserLearnService.class
 com\attach\group\pojo\Task.class
@@ -91,4 +91,5 @@ com\attach\group\pojo\UserGroupExample$Criterion.class
 com\attach\sign_in\commons\utils\JsonUtils.class
 com\attach\sign_in\pojo\SignInExample.class
 com\attach\group\pojo\GroupsExample$Criterion.class
+com\attach\group\commons\pojo\TaskIdAndName.class
 com\attach\sign_in\pojo\StatisticsExample$Criteria.class

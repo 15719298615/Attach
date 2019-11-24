@@ -1,5 +1,6 @@
 package com.attach.group.commons.utils;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -77,4 +78,8 @@ public class GetId {
         beginDate=calendar.getTime(); //这个时间就是日期往后推一天的结果
         return beginDate;
     }
+
+
 }
+
+

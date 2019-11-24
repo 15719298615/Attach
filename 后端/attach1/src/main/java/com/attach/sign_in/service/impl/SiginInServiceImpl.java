@@ -93,6 +93,15 @@ public class SiginInServiceImpl implements SignInService {
         List<SignIn> signIns = signInMapper.selectByExample(example);
         if (signIns != null && signIns.size() > 0) {
             if (signIns.get(0).getSignInId().equals(signInId)) {
+
+                UserSignInExample userSignInExample = new UserSignInExample();
+                userSignInExample.createCriteria().andSignInIdEqualTo(signInId).andUserIdEqualTo(userId);
+                List<UserSignIn> userSignIns = userSignInMapper.selectByExample(userSignInExample);
+                if(userSignIns!=null&&userSignIns.size()>0){
+                    return JsonUtils.objectToJson("fail");
+                }
+
+
                 UserSignIn userSignIn = new UserSignIn();
                 userSignIn.setUserId(userId);
                 userSignIn.setSignInId(signInId);
@@ -450,38 +459,36 @@ public class SiginInServiceImpl implements SignInService {
         List<UserSignIn> userSignIns = userSignInMapper.selectByExample(userSignInExample);
         if(userSignIns.size()>0 && userSignIns!=null){
             //寻找这个用户签到的次数--sign_in_num
-            ParticipateExample participateExample = new ParticipateExample();
-            participateExample.createCriteria().andUserIdEqualTo(userId).andSignInIdEqualTo(signInId);
-            List<Participate> participates = participateMapper.selectByExample(participateExample);
-            if (participates != null && participates.size() > 0) {
-                sign_in_num = participates.size();
-//            total_num=participates.size();
-                effective_date_list = new Date[sign_in_num];
-//                total_date_list = null;
                 SignInExample signInExample = new SignInExample();
                 signInExample.createCriteria().andSignInIdEqualTo(signInId);
                 List<SignIn> signIns = signInMapper.selectByExample(signInExample);
                 if (signIns != null && signIns.size() > 0) {
-                    //这个任务的签到范围，就是总共的签到日期。
-                    total_num = GetId.getTimeDistance(signIns.get(0).getStartTime(), signIns.get(0).getEndTime()) + 1;
-                    total_date_list = new Date[GetId.getTimeDistance(signIns.get(0).getStartTime(), signIns.get(0).getEndTime()) + 1];
-                    for (int i = 0; i < total_date_list.length; i++) {
+                    ParticipateExample participateExample = new ParticipateExample();
+                    participateExample.createCriteria().andUserIdEqualTo(userId).andSignInIdEqualTo(signInId);
+                    List<Participate> participates = participateMapper.selectByExample(participateExample);
+                    if (participates != null && participates.size() > 0) {
+                        sign_in_num = participates.size();
+                        effective_date_list = new Date[sign_in_num];
+                        //这个任务的签到范围，就是总共的签到日期。
+                        total_num = GetId.getTimeDistance(signIns.get(0).getStartTime(), signIns.get(0).getEndTime()) + 1;
+                        total_date_list = new Date[GetId.getTimeDistance(signIns.get(0).getStartTime(), signIns.get(0).getEndTime()) + 1];
+                        for (int i = 0; i < total_date_list.length; i++) {
 //                    Date date = GetId.addDate(signIns.get(0).getStartTime(), i);
-                        total_date_list[i] = GetId.addDate(signIns.get(0).getStartTime(), i);
-                    }
-                    for (Participate p : participates) {
-                        if (p.getSignInTime().getTime() >= signIns.get(0).getStartTime().getTime() && p.getSignInTime().getTime() <= signIns.get(0).getEndTime().getTime()) {
-                            effective_date_list[count] = p.getSignInTime();
-                            count++;
+                            total_date_list[i] = GetId.addDate(signIns.get(0).getStartTime(), i);
+                        }
+                        for (Participate p : participates) {
+                            if (p.getSignInTime().getTime() >= signIns.get(0).getStartTime().getTime() && p.getSignInTime().getTime() <= signIns.get(0).getEndTime().getTime()) {
+                                effective_date_list[count] = p.getSignInTime();
+                                count++;
 //                    sign_in_num++;
+                            }
                         }
                     }
-                }
-                result.setSignInNum(sign_in_num);
-                result.setTotalNum(total_num);
-                result.setEffectiveDateList(effective_date_list);
-                result.setTotalDateList(total_date_list);
-            }
+                    result.setSignInNum(sign_in_num);
+                    result.setTotalNum(total_num);
+                    result.setEffectiveDateList(effective_date_list);
+                    result.setTotalDateList(total_date_list);
+                    }
             return JsonUtils.objectToJson(result);
         }else{
             //根本没有参与这个签到任务

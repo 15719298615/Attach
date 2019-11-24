@@ -24,6 +24,7 @@ D:\java\attach1\src\main\java\com\attach\sign_in\controller\SignInController.jav
 D:\java\attach1\src\main\java\com\attach\sign_in\mapper\SignInMapper.java
 D:\java\attach1\src\main\java\com\attach\group\commons\utils\JsonUtils.java
 D:\java\attach1\src\main\java\com\attach\sign_in\pojo\SignInExample.java
+D:\java\attach1\src\main\java\com\attach\group\commons\pojo\TaskIdAndName.java
 D:\java\attach1\src\main\java\com\attach\learn\pojo\UserLearn.java
 D:\java\attach1\src\main\java\com\attach\sign_in\commons\pojo\signInResult.java
 D:\java\attach1\src\main\java\com\attach\group\pojo\UserDayTaskExample.java

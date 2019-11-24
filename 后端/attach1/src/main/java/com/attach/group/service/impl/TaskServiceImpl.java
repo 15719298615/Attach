@@ -69,6 +69,38 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public String my_task(Integer groupId) {
+        if (groupId==null){
+            return JsonUtils.objectToJson("fail");
+        }
+        //判断groupId
+        GroupsExample groupsExample = new GroupsExample();
+        groupsExample.createCriteria().andIdEqualTo(groupId);
+        List<Groups> groups = groupsMapper.selectByExample(groupsExample);
+        if (groups==null||groups.size()<=0){
+            return JsonUtils.objectToJson("fail");
+        }
+
+        TaskExample taskExample = new TaskExample();
+        taskExample.createCriteria().andGroupIdEqualTo(groupId);
+        List<Task> tasks = taskMapper.selectByExample(taskExample);
+        if(tasks==null||tasks.size()<=0){
+            return JsonUtils.objectToJson("fail");
+        }
+
+        List<TaskIdAndName> taskIdAndNames = new ArrayList<>();
+        for(Task task:tasks){
+
+            TaskIdAndName taskIdAndName = new TaskIdAndName();
+            taskIdAndName.setTaskId(task.getId());
+            taskIdAndName.setTaskName(task.getTaskName());
+            taskIdAndNames.add(taskIdAndName);
+        }
+
+        return JsonUtils.objectToJson(taskIdAndNames);
+    }
+
+    @Override
     public String is_his(Integer userId, Integer groupId) {
         if(userId==null||groupId==null){
             return JsonUtils.objectToJson("false");
@@ -288,6 +320,9 @@ public class TaskServiceImpl implements TaskService {
                         }
                     }
                     MemberDetail memberDetail = new MemberDetail();
+                    memberDetail.setTaskNum(tasks.size());
+                    memberDetail.setDayNum(timeDistance);
+                    memberDetail.setStartDate(groups.get(0).getStartTime());
                     memberDetail.setTotalComplete(totalComplete);
                     memberDetail.setArr(arr);
                     return JsonUtils.objectToJson(memberDetail);
