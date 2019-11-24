@@ -35,8 +35,8 @@ public class TaskController {
 
     @RequestMapping(value = "my-task",produces="application/json;charset=utf-8")
     @ResponseBody
-    public String my_task(Integer groupId){
-        return taskServiceImpl.my_task(groupId);
+    public String my_task(Integer groupId,Integer userId){
+        return taskServiceImpl.my_task(groupId,userId);
     }
 
 

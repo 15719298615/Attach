@@ -4,13 +4,14 @@ public class TaskIdAndName {
 
     private Integer taskId;
     private String taskName;
-    private int status;
+    private boolean status;
 
-    public int getStatus() {
+
+    public boolean isStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(boolean status) {
         this.status = status;
     }
 

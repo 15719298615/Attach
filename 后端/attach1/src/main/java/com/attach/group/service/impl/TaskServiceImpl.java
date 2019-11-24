@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -69,29 +70,44 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public String my_task(Integer groupId) {
-        if (groupId==null){
+    public String my_task(Integer groupId,Integer userId) {
+        if (groupId==null||userId==null){
             return JsonUtils.objectToJson("fail");
         }
+
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andUserIdEqualTo(userId);
+        List<User> users = userMapper.selectByExample(userExample);
+        if(users==null&&users.size()>0){
+            return JsonUtils.objectToJson("fail");
+        }
+
         //判断groupId
         GroupsExample groupsExample = new GroupsExample();
         groupsExample.createCriteria().andIdEqualTo(groupId);
         List<Groups> groups = groupsMapper.selectByExample(groupsExample);
-        if (groups==null||groups.size()<=0){
+        if (groups==null&&groups.size()<=0){
             return JsonUtils.objectToJson("fail");
         }
 
         TaskExample taskExample = new TaskExample();
         taskExample.createCriteria().andGroupIdEqualTo(groupId);
         List<Task> tasks = taskMapper.selectByExample(taskExample);
-        if(tasks==null||tasks.size()<=0){
+        if(tasks==null&&tasks.size()<=0){
             return JsonUtils.objectToJson("fail");
         }
 
         List<TaskIdAndName> taskIdAndNames = new ArrayList<>();
         for(Task task:tasks){
-
             TaskIdAndName taskIdAndName = new TaskIdAndName();
+            UserDayTaskExample userDayTaskExample = new UserDayTaskExample();
+            userDayTaskExample.createCriteria().andTaskIdEqualTo(task.getId()).andUserIdEqualTo(userId).andTimeEqualTo(GetId.getNowTime());
+            List<UserDayTask> userDayTasks = userDayTaskMapper.selectByExample(userDayTaskExample);
+            if(userDayTasks!=null&&userDayTasks.size()>0){//判断今天签到状态
+                taskIdAndName.setStatus(true);
+            }else {
+                taskIdAndName.setStatus(false);
+            }
             taskIdAndName.setTaskId(task.getId());
             taskIdAndName.setTaskName(task.getTaskName());
             taskIdAndNames.add(taskIdAndName);
@@ -199,7 +215,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public String finish_task(Integer userId, Integer taskId) {
-        if (userId != null && taskId != null) {
+        if (userId != null && taskId != null) {//验证userid
             UserExample userExample = new UserExample();
             userExample.createCriteria().andUserIdEqualTo(userId);
             List<User> users = userMapper.selectByExample(userExample);
@@ -210,9 +226,20 @@ public class TaskServiceImpl implements TaskService {
             TaskExample taskExample = new TaskExample();
             taskExample.createCriteria().andIdEqualTo(taskId);
             List<Task> tasks = taskMapper.selectByExample(taskExample);
-            if(tasks==null||tasks.size()<=0){
+            if(tasks==null||tasks.size()<=0){//验证taskId是否存在
                 return JsonUtils.objectToJson("fail");
             }
+
+            GroupsExample groupsExample = new GroupsExample();
+            groupsExample.createCriteria().andIdEqualTo(tasks.get(0).getGroupId());
+            List<Groups> groups = groupsMapper.selectByExample(groupsExample);
+            if (groups==null||groups.size()<=0){//查看是否有这个任务
+                return JsonUtils.objectToJson("fail");
+            }
+            if(GetId.getNowTime().getTime()>groups.get(0).getEndTime().getTime()){
+                return JsonUtils.objectToJson("fail");
+            }
+
 
 
             UserDayTaskExample userDayTaskExample = new UserDayTaskExample();
@@ -223,9 +250,9 @@ public class TaskServiceImpl implements TaskService {
                 userDayTasks.get(0).setComplete((byte) 1);
                 int index = userDayTaskMapper.updateByExample(userDayTasks.get(0), userDayTaskExample);
                 if (index > 0) {
-                    return "success";
+                    return JsonUtils.objectToJson("success");
                 } else {
-                    return "fail";
+                    return JsonUtils.objectToJson("fail");
                 }
             }
 
@@ -236,12 +263,12 @@ public class TaskServiceImpl implements TaskService {
             userDayTask.setComplete((byte) 1);
             int index = userDayTaskMapper.insert(userDayTask);
             if (index > 0) {
-                return "success";
+                return JsonUtils.objectToJson("success");
             } else {
-                return "fail";
+                return JsonUtils.objectToJson("fail");
             }
         }
-        return "fail";
+        return JsonUtils.objectToJson("fail");
     }
 
     @Override

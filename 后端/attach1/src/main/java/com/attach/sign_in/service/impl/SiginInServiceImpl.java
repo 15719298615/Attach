@@ -33,19 +33,33 @@ public class SiginInServiceImpl implements SignInService {
     private StatisticsMapper statisticsMapper;
 
     @Override
-    public String create_sign_in(SignIn signIn, HttpServletRequest req, HttpServletResponse resp) {
+    public String create_sign_in(Integer userId,String signInName,Double siteLo,Double siteLa,String startTime,String endTime,Integer maxNumber) {
         signInResult result = new signInResult();
-        if (signIn.getUserId() != null && signIn.getSignInName().length() != 0 && signIn.getSiteLa() != null && signIn.getSiteLo() != null
-                && signIn.getStartTime() != null && signIn.getEndTime() != null && signIn.getMaxNumber() != null) {
+
+        if (userId != null && signInName.length() != 0 && siteLa != null && siteLo != null
+                && startTime.trim().length() == 13 && endTime.trim().length() == 13 && maxNumber!= null) {
+
             UserExample userExample = new UserExample();
-            userExample.createCriteria().andUserIdEqualTo(signIn.getUserId());
+            userExample.createCriteria().andUserIdEqualTo(userId);
             List<User> users = userMapper.selectByExample(userExample);
             if (users != null && users.size() > 0) {
+                SignIn signIn = new SignIn();
                 int SignInId = GetId.getSigInId();
                 String SignInPwd = GetId.getSignInPassword(4);
                 signIn.setSignInId(SignInId);
                 signIn.setSignInPassword(SignInPwd);
                 signIn.setEffective((byte) 1);
+                long l1 = Long.parseLong(startTime.trim());
+                Date date = new Date(l1);
+                signIn.setStartTime(date);
+                l1 = Long.parseLong(endTime.trim());
+                date = new Date(l1);
+                signIn.setEndTime(date);
+                signIn.setUserId(userId);
+                signIn.setSignInName(signInName);
+                signIn.setSiteLa(siteLa);
+                signIn.setSiteLo(siteLo);
+                signIn.setMaxNumber(maxNumber);
                 int index = signInMapper.insert(signIn);
                 if (index > 0) {
                     result.setSignInId(SignInId);
@@ -58,19 +72,19 @@ public class SiginInServiceImpl implements SignInService {
                     if (insert > 0) {
                         result.setStatus("success");
                     } else {
-                        return "fail";
+                        return "fail4";
                     }
                     return JsonUtils.objectToJson(result);
                 } else {
-                    result.setStatus("fail");
+                    result.setStatus("fail3");
                     return JsonUtils.objectToJson(result);
                 }
             }
-            result.setStatus("fail");
+            result.setStatus("fail2");
             return JsonUtils.objectToJson(result);
 
         }
-        result.setStatus("fail");
+        result.setStatus("fail1");
         return JsonUtils.objectToJson(result);
     }
 
@@ -398,7 +412,7 @@ public class SiginInServiceImpl implements SignInService {
                                     participate.setSignInTime(GetId.getNowTime());
                                     int index = participateMapper.insert(participate);
                                     if (index > 0) {
-                                        return JsonUtils.objectToJson("succeed");
+                                        return JsonUtils.objectToJson("success");
                                     } else {
                                         return JsonUtils.objectToJson("fail");    //插入失败
                                     }
@@ -416,7 +430,7 @@ public class SiginInServiceImpl implements SignInService {
                                     participate.setSignInTime(GetId.getNowTime());
                                     int index = participateMapper.insert(participate);
                                     if (index > 0) {
-                                        return JsonUtils.objectToJson("succeed");
+                                        return JsonUtils.objectToJson("success");
                                     } else {
                                         return JsonUtils.objectToJson("fail");    //插入失败
                                     }

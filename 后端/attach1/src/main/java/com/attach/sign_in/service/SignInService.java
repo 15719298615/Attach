@@ -11,7 +11,7 @@ public interface SignInService {
      * 创建签到任务
      * @return
      */
-    String create_sign_in(SignIn signIn, HttpServletRequest req, HttpServletResponse resp);
+    String create_sign_in(Integer userId,String signInName,Double siteLo,Double siteLa,String startTime,String endTime,Integer maxNumber);
 
     /**
      * 加入签到任务

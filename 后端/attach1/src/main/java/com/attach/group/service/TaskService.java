@@ -21,7 +21,7 @@ public interface TaskService {
      */
     String create_group(Groups group);
 
-    String my_task(Integer groupId);
+    String my_task(Integer groupId,Integer userId);
 
     String is_his(Integer userId,Integer groupId);
 
