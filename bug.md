@@ -19,3 +19,21 @@
 
 后端返回前端代码时乱码
 解决方法：在controller的requestmapping中加入：produces="application/json;charset=utf-8"
+
+
+
+2019.10.16
+
+
+数据库表设计时为考虑到关键字问题，有一张表的表名为group为关键字，插入数据时一直出问题。
+解决：更换表名
+
+mybatis注入mapper时重复error while adding the mapper
+解决：
+在mapper逆向工程生成时有重复生成问题，就是有重复的id，所以在生成时不能注入两次，在mapper.xml中将重复生成的删除
+
+
+AJAX跨域请求问题：
+在控制器中加入HttpServletResponse response
+//设置响应头
+response.setHeader("Access-Control-Allow-Origin", "*");
