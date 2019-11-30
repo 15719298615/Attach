@@ -39,5 +39,7 @@ AJAX跨域请求问题：
 response.setHeader("Access-Control-Allow-Origin", "*");
 
 2019.11.24
+
+
 有些签到任务一定要判断是否已经在数据库中存在，要先进行查找，如果有的话就更新，没有才插入，不能一个任务参加了多次。
 
