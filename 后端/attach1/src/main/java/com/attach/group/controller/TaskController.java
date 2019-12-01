@@ -18,9 +18,9 @@ public class TaskController {
     private TaskService taskServiceImpl;
     @RequestMapping(value ="create-group" , produces="application/json;charset=utf-8")
     @ResponseBody
-    public String create_group(Groups groups){
+    public String create_group(Integer userId,String groupName,Long startTime,Long endTime){
         try {
-            return taskServiceImpl.create_group(groups);
+            return taskServiceImpl.create_group(userId,groupName,startTime,endTime);
         }catch (Exception e){
             return JsonUtils.objectToJson("status:[fail]");
         }
@@ -50,8 +50,8 @@ public class TaskController {
 
     @RequestMapping(value ="join-group" , produces="application/json;charset=utf-8")
     @ResponseBody
-    public String join_group(Integer userId,String groupNumber,String groupPassowrd){
-        return taskServiceImpl.join_group(userId,groupNumber,groupPassowrd);
+    public String join_group(Integer userId,String groupNumber,String groupPassword){
+        return taskServiceImpl.join_group(userId,groupNumber,groupPassword);
     }
     @RequestMapping(value ="get-my-group" , produces="application/json;charset=utf-8")
     @ResponseBody

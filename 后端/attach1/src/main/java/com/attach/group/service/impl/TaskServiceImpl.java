@@ -34,40 +34,43 @@ public class TaskServiceImpl implements TaskService {
     @Resource
     private UserMapper userMapper;
     @Override
-    public String create_group(Groups group) {
-        if(group!=null){
-            if(group.getUserId()!=null&&group.getGroupName().length()>0&&group.getStartTime()!=null&&group.getEndTime()!=null){
-                UserExample userExample = new UserExample();
-                userExample.createCriteria().andUserIdEqualTo(group.getUserId());
-                List<User> users = userMapper.selectByExample(userExample);
-                if(users==null||users.size()<=0){
-                    return JsonUtils.objectToJson("fail");
-                }
-                String group_number = GetId.getSignInPassword(8);
-                String group_passowrd = GetId.getSignInPassword(8);
-                Groups group1 = new Groups();
-                group1.setUserId(group.getUserId());
-                group1.setGroupName(group.getGroupName());
-                group1.setGroupNumber(group_number);
-                group1.setGroupPassword(group_passowrd);
-                group1.setStartTime(group.getStartTime());
-                group1.setEndTime(group.getEndTime());
-                group1.setEffective((byte)1);
-                int index = groupsMapper.insert(group1);
-                if(index>0){
-                    CreateGroup createGroup = new CreateGroup();
-                    createGroup.setStatus("success");
-                    createGroup.setGroup_number(group_number);
-                    createGroup.setGroup_passowrd(group_passowrd);
-                    return JsonUtils.objectToJson(createGroup);
-                }
-            }else {
-
+    public String create_group(Integer userId,String groupName,Long startTime,Long endTime) {
+        if (userId != null && groupName.length() > 0 && startTime != null && endTime != null) {
+            UserExample userExample = new UserExample();
+            userExample.createCriteria().andUserIdEqualTo(userId);
+            List<User> users = userMapper.selectByExample(userExample);
+            if (users == null || users.size() <= 0) {//判断这个人是否存在
                 return JsonUtils.objectToJson("fail");
             }
+            String group_number = GetId.getSignInPassword(8);
+            String group_password = GetId.getSignInPassword(8);
+            Groups group1 = new Groups();
+            group1.setUserId(userId);
+            group1.setGroupName(groupName);
+            group1.setGroupNumber(group_number);
+            group1.setGroupPassword(group_password);
+            Date date = new Date(startTime);
+            group1.setStartTime(date);
+            date = new Date(endTime);
+            group1.setEndTime(date);
+            group1.setEffective((byte) 1);
+            int index = groupsMapper.insert(group1);
+            if (index > 0) {
+                CreateGroup createGroup = new CreateGroup();
+                createGroup.setStatus("success");
+                createGroup.setGroup_number(group_number);
+                createGroup.setGroup_passowrd(group_password);
+                return JsonUtils.objectToJson(createGroup);
+            }else {
+                return JsonUtils.objectToJson("fail");
+            }
+        } else {
+
+            return JsonUtils.objectToJson("fail");
         }
-        return JsonUtils.objectToJson("fail");
     }
+
+
 
     @Override
     public String my_task(Integer groupId,Integer userId) {
@@ -152,8 +155,8 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public String join_group(Integer userId, String groupNumber, String groupPassowrd) {
-        if(userId!=null&&groupNumber!=null&&groupPassowrd!=null){
+    public String join_group(Integer userId, String groupNumber, String groupPassword) {
+        if(userId!=null&&groupNumber!=null&&groupPassword!=null){
             UserExample userExample = new UserExample();
             userExample.createCriteria().andUserIdEqualTo(userId);
             List<User> users = userMapper.selectByExample(userExample);
@@ -161,14 +164,14 @@ public class TaskServiceImpl implements TaskService {
                 return JsonUtils.objectToJson("fail");
             }
             GroupsExample example = new GroupsExample();
-            example.createCriteria().andGroupNumberEqualTo(groupNumber).andGroupPasswordEqualTo(groupPassowrd);
+            example.createCriteria().andGroupNumberEqualTo(groupNumber).andGroupPasswordEqualTo(groupPassword);
             List<Groups> groups = groupsMapper.selectByExample(example);
             if (groups!=null&&groups.size()>0){
                 if(groups.get(0).getGroupNumber().equals(groupNumber)){
                     UserGroupExample example1 = new UserGroupExample();
                     example1.createCriteria().andUserIdEqualTo(userId).andGroupIdEqualTo(groups.get(0).getId());
                     List<UserGroup> userGroups = userGroupMapper.selectByExample(example1);
-                    if(userGroups!=null&&userGroups.size()>0){
+                    if(userGroups.size()>0){
                         return JsonUtils.objectToJson("fail");
                     }
                     UserGroup userGroup = new UserGroup();

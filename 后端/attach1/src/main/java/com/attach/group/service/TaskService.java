@@ -19,7 +19,7 @@ public interface TaskService {
      * 成功与否状态status:[success, fail]
      * 成功再返回任务组号和密码（group_number,group_passowrd）任务组号随机8位数字。
      */
-    String create_group(Groups group);
+    String create_group(Integer userId,String groupName,Long startTime,Long endTime);
 
     String my_task(Integer groupId,Integer userId);
 
@@ -46,7 +46,7 @@ public interface TaskService {
      * @return回值：
      * 成功与否状态status:[success, fail]
      */
-    String join_group(Integer userId, String groupNumber, String groupPassowrd);
+    String join_group(Integer userId, String groupNumber, String groupPassword);
 
     /**
      * 请求参数：

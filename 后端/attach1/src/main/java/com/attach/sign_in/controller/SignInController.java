@@ -18,7 +18,7 @@ public class SignInController {
 
     @RequestMapping(value="create-sign-in",produces="application/json;charset=utf-8")
     @ResponseBody
-    public String create_sign_in(Integer userId,String signInName,Double siteLo,Double siteLa,String startTime,String endTime,Integer maxNumber){
+    public String create_sign_in(Integer userId,String signInName,Double siteLo,Double siteLa,Long startTime,Long endTime,Integer maxNumber){
         //设置响应头
         try{
             return signInServiceImpl.create_sign_in(userId,signInName,siteLo,siteLa,startTime,endTime,maxNumber);

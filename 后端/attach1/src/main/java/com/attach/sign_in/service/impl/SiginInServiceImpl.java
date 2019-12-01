@@ -33,11 +33,11 @@ public class SiginInServiceImpl implements SignInService {
     private StatisticsMapper statisticsMapper;
 
     @Override
-    public String create_sign_in(Integer userId,String signInName,Double siteLo,Double siteLa,String startTime,String endTime,Integer maxNumber) {
+    public String create_sign_in(Integer userId,String signInName,Double siteLo,Double siteLa,Long startTime,Long endTime,Integer maxNumber) {
         signInResult result = new signInResult();
 
         if (userId != null && signInName.length() != 0 && siteLa != null && siteLo != null
-                && startTime.trim().length() == 13 && endTime.trim().length() == 13 && maxNumber!= null) {
+                && startTime != null && endTime!= null && maxNumber!= null) {
 
             UserExample userExample = new UserExample();
             userExample.createCriteria().andUserIdEqualTo(userId);
@@ -49,11 +49,9 @@ public class SiginInServiceImpl implements SignInService {
                 signIn.setSignInId(SignInId);
                 signIn.setSignInPassword(SignInPwd);
                 signIn.setEffective((byte) 1);
-                long l1 = Long.parseLong(startTime.trim());
-                Date date = new Date(l1);
+                Date date = new Date(startTime);
                 signIn.setStartTime(date);
-                l1 = Long.parseLong(endTime.trim());
-                date = new Date(l1);
+                date = new Date(endTime);
                 signIn.setEndTime(date);
                 signIn.setUserId(userId);
                 signIn.setSignInName(signInName);
@@ -548,15 +546,6 @@ public class SiginInServiceImpl implements SignInService {
             body = userSignIn.size();
         }
         All = length * body;             //每天需要签到的和多少天相乘即可。
-//        SignInExample signInExample1=new SignInExample();
-//        signInExample1.createCriteria().andSignInIdEqualTo(signInId);
-//        List<SignIn> signIns1 = signInMapper.selectByExample(signInExample1);
-//        Integer userId = signIns1.get(0).getUserId();
-//        UserSignInExample userSignInExample1=new UserSignInExample();
-//        userSignInExample1.createCriteria().andUserIdEqualTo(userId).andSignInIdEqualTo(signInId);
-//        List<UserSignIn> userSignIns1 = userSignInMapper.selectByExample(userSignInExample1);
-//        //进行身份验证    是组长且参与了参与表。
-//        if(userSignIns1!=null && userSignIns1.size()>0){
         StatisticsExample statisticsExample=new StatisticsExample();
         statisticsExample.createCriteria().andSignInIdEqualTo(signInId);     //参与任务每日统计，多少条就是多少天。
         List<Statistics> result = statisticsMapper.selectByExample(statisticsExample);

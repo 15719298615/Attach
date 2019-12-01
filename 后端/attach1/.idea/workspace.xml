@@ -50,20 +50,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/attach/group/service/TaskService.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="188">
-              <caret line="23" column="11" selection-start-line="23" selection-start-column="11" selection-end-line="23" selection-end-column="11" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/attach/group/service/impl/TaskServiceImpl.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/attach/learn/service/impl/UserLearnServiceImpl.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1372">
-              <caret line="239" column="54" selection-start-line="239" selection-start-column="54" selection-end-line="239" selection-end-column="54" />
+            <state relative-caret-position="372">
+              <caret line="291" column="17" lean-forward="true" selection-start-line="291" selection-start-column="17" selection-end-line="291" selection-end-column="17" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -72,7 +63,7 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="das://e7c323fa-0161-44b9-87ba-9c8b961a8514/schema/attach/table/task">
+        <entry file="das://e7c323fa-0161-44b9-87ba-9c8b961a8514/schema/attach/table/day_learning_time">
           <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
             <state>
               <filtering enabled="true" />
@@ -81,7 +72,7 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="das://e7c323fa-0161-44b9-87ba-9c8b961a8514/schema/attach/table/user_day_task">
+        <entry file="das://e7c323fa-0161-44b9-87ba-9c8b961a8514/schema/attach/table/user_learn">
           <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
             <state>
               <filtering enabled="true" />
@@ -90,25 +81,22 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/attach/group/controller/TaskController.java">
+        <entry file="das://e7c323fa-0161-44b9-87ba-9c8b961a8514/schema/attach/table/user">
+          <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+            <state>
+              <filtering enabled="true" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/attach/sign_in/service/impl/SiginInServiceImpl.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="188">
-              <caret line="38" column="35" lean-forward="true" selection-start-line="38" selection-start-column="35" selection-end-line="38" selection-end-column="35" />
+            <state relative-caret-position="14775">
+              <caret line="608" column="72" selection-start-line="608" selection-start-column="72" selection-end-line="608" selection-end-column="72" />
               <folding>
-                <element signature="e#1029#1030#0" expanded="true" />
-                <element signature="e#1085#1086#0" expanded="true" />
-                <element signature="e#1230#1231#0" expanded="true" />
-                <element signature="e#1285#1286#0" expanded="true" />
+                <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="das://e7c323fa-0161-44b9-87ba-9c8b961a8514/schema/attach/table/groups">
-          <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-            <state>
-              <filtering enabled="true" />
             </state>
           </provider>
         </entry>
@@ -140,17 +128,17 @@
         <option value="$PROJECT_DIR$/src/main/java/com/attach/sign_in/commons/pojo/signinDetailResult.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/attach/sign_in/commons/pojo/SignDetailResult.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/attach/group/commons/pojo/Task.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/attach/learn/service/impl/UserLearnServiceImpl.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/attach/learn/controller/LearnController.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/attach/group/commons/pojo/MemberDetail.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/attach/group/commons/utils/GetId.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/attach/group/commons/pojo/TaskIdAndName.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/attach/sign_in/service/SignInService.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/attach/sign_in/controller/SignInController.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/attach/sign_in/service/impl/SiginInServiceImpl.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/attach/group/service/TaskService.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/attach/group/commons/pojo/TaskIdAndName.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/attach/group/controller/TaskController.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/attach/group/service/TaskService.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/attach/group/service/impl/TaskServiceImpl.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/attach/sign_in/service/impl/SiginInServiceImpl.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/attach/learn/service/impl/UserLearnServiceImpl.java" />
       </list>
     </option>
   </component>
@@ -185,7 +173,7 @@
       <select />
     </treeState>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="425" />
     <option name="y" value="28" />
     <option name="width" value="1400" />
@@ -196,6 +184,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -236,7 +225,7 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="attach" type="462c0819:PsiDirectoryNode" />
-              <item name="group" type="462c0819:PsiDirectoryNode" />
+              <item name="learn" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="attach1" type="b2602c69:ProjectViewProjectNode" />
@@ -245,28 +234,7 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="attach" type="462c0819:PsiDirectoryNode" />
-              <item name="group" type="462c0819:PsiDirectoryNode" />
-              <item name="commons" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="attach1" type="b2602c69:ProjectViewProjectNode" />
-              <item name="attach1" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="attach" type="462c0819:PsiDirectoryNode" />
-              <item name="group" type="462c0819:PsiDirectoryNode" />
-              <item name="commons" type="462c0819:PsiDirectoryNode" />
-              <item name="utils" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="attach1" type="b2602c69:ProjectViewProjectNode" />
-              <item name="attach1" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="attach" type="462c0819:PsiDirectoryNode" />
-              <item name="group" type="462c0819:PsiDirectoryNode" />
+              <item name="learn" type="462c0819:PsiDirectoryNode" />
               <item name="service" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -276,18 +244,9 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="attach" type="462c0819:PsiDirectoryNode" />
-              <item name="group" type="462c0819:PsiDirectoryNode" />
+              <item name="learn" type="462c0819:PsiDirectoryNode" />
               <item name="service" type="462c0819:PsiDirectoryNode" />
               <item name="impl" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="attach1" type="b2602c69:ProjectViewProjectNode" />
-              <item name="attach1" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="attach" type="462c0819:PsiDirectoryNode" />
-              <item name="sign_in" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="attach1" type="b2602c69:ProjectViewProjectNode" />
@@ -313,7 +272,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
     </panes>
   </component>
@@ -444,12 +402,15 @@
       <workItem from="1574516355575" duration="36000" />
       <workItem from="1574516419363" duration="266000" />
       <workItem from="1574557141573" duration="4654000" />
-      <workItem from="1574578195637" duration="14986000" />
+      <workItem from="1574578195637" duration="19341000" />
+      <workItem from="1574675330796" duration="10164000" />
+      <workItem from="1574690488634" duration="56000" />
+      <workItem from="1575025092616" duration="8456000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="95012000" />
+    <option name="totallyTimeSpent" value="118043000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -460,7 +421,7 @@
       <window_info id="UI Designer" order="2" />
       <window_info id="设计师" order="3" />
       <window_info id="Favorites" order="4" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="5" visible="true" weight="0.18230277" />
+      <window_info content_ui="combo" id="Project" order="5" visible="true" weight="0.18869936" />
       <window_info id="Structure" order="6" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="7" />
       <window_info id="Web" order="8" side_tool="true" />
@@ -471,7 +432,7 @@
       <window_info anchor="bottom" id="Terminal" order="4" weight="0.32936078" />
       <window_info anchor="bottom" id="Message" order="5" />
       <window_info anchor="bottom" id="Find" order="6" />
-      <window_info anchor="bottom" id="Run" order="7" visible="true" weight="0.34994584" />
+      <window_info anchor="bottom" id="Run" order="7" weight="0.34994584" />
       <window_info anchor="bottom" id="Debug" order="8" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="9" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="10" weight="0.4" />
@@ -481,7 +442,7 @@
       <window_info anchor="bottom" id="Database Console" order="14" weight="0.32936078" />
       <window_info anchor="bottom" id="Messages" order="15" weight="0.32936078" />
       <window_info anchor="bottom" id="Java Enterprise" order="16" />
-      <window_info active="true" anchor="right" id="Database" order="0" visible="true" weight="0.1609808" />
+      <window_info anchor="right" id="Database" order="0" visible="true" weight="0.1609808" />
       <window_info anchor="right" id="Theme Preview" order="1" />
       <window_info anchor="right" id="控制板" order="2" />
       <window_info anchor="right" id="Capture Analysis" order="3" />
@@ -505,17 +466,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
           <caret line="3" column="10" selection-start-line="3" selection-start-column="10" selection-end-line="3" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/attach/group/commons/pojo/CreateGroup.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="50">
-          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
-          <folding>
-            <element signature="e#193#194#0" expanded="true" />
-            <element signature="e#222#223#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -544,20 +494,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-643">
           <caret line="11" column="8" selection-start-line="11" selection-start-column="8" selection-end-line="11" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/attach/learn/commons/utils/JsonUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/applicationContext.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-531">
-          <caret line="15" column="54" selection-start-line="15" selection-start-column="54" selection-end-line="15" selection-end-column="54" />
         </state>
       </provider>
     </entry>
@@ -649,13 +585,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/attach/sign_in/commons/utils/GetId.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-28">
-          <caret line="48" column="7" selection-start-line="48" selection-start-column="7" selection-end-line="48" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1421">
@@ -677,13 +606,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/attach/learn/commons/pojo/LearnResult.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="875">
-          <caret line="47" column="5" selection-start-line="47" selection-start-column="5" selection-end-line="47" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/attach/learn/pojo/DayLearningTime.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="475">
@@ -695,16 +617,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-153">
           <caret line="7" column="17" selection-start-line="7" selection-start-column="17" selection-end-line="7" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/attach/learn/service/impl/UserLearnServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="25">
-          <caret line="127" column="52" selection-start-line="127" selection-start-column="52" selection-end-line="127" selection-end-column="52" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -736,43 +648,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/attach/learn/controller/LearnController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="219">
-          <caret line="15" column="32" selection-start-line="15" selection-start-column="32" selection-end-line="15" selection-end-column="32" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1857#1858#0" expanded="true" />
-            <element signature="e#1923#1924#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/attach/learn/mapper/UserLearnMapper.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="296">
           <caret line="24" column="16" selection-start-line="24" selection-start-column="16" selection-end-line="24" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://e7c323fa-0161-44b9-87ba-9c8b961a8514/schema/attach/table/day_learning_time">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://e7c323fa-0161-44b9-87ba-9c8b961a8514/schema/attach/table/user_learn">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://e7c323fa-0161-44b9-87ba-9c8b961a8514/schema/attach/table/user_group">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
         </state>
       </provider>
     </entry>
@@ -788,13 +667,6 @@
         <state relative-caret-position="-450" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/attach/sign_in/controller/SignInController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="271">
-          <caret line="23" column="44" selection-start-line="23" selection-start-column="44" selection-end-line="23" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/attach/sign_in/pojo/SignIn.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="400">
@@ -807,37 +679,6 @@
       </provider>
     </entry>
     <entry file="das://e7c323fa-0161-44b9-87ba-9c8b961a8514/schema/attach/table/user_sign_in">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://e7c323fa-0161-44b9-87ba-9c8b961a8514/schema/attach/table/sign_in">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/attach/sign_in/service/impl/SiginInServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1557">
-          <caret line="432" column="78" selection-start-line="432" selection-start-column="78" selection-end-line="432" selection-end-column="78" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/attach/sign_in/service/SignInService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="182">
-          <caret line="13" column="11" selection-start-line="13" selection-start-column="11" selection-end-line="13" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://e7c323fa-0161-44b9-87ba-9c8b961a8514/schema/attach/table/user">
       <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
         <state>
           <filtering enabled="true" />
@@ -867,30 +708,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/attach/group/service/TaskService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="188">
-          <caret line="23" column="11" selection-start-line="23" selection-start-column="11" selection-end-line="23" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
     <entry file="das://e7c323fa-0161-44b9-87ba-9c8b961a8514/schema/attach/table/participate">
       <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
         <state>
           <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/attach/group/controller/TaskController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="188">
-          <caret line="38" column="35" lean-forward="true" selection-start-line="38" selection-start-column="35" selection-end-line="38" selection-end-column="35" />
-          <folding>
-            <element signature="e#1029#1030#0" expanded="true" />
-            <element signature="e#1085#1086#0" expanded="true" />
-            <element signature="e#1230#1231#0" expanded="true" />
-            <element signature="e#1285#1286#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -908,6 +729,51 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/applicationContext.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="365">
+          <caret line="51" column="8" selection-start-line="51" selection-start-column="8" selection-end-line="51" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/attach/group/service/TaskService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1100">
+          <caret line="48" column="76" selection-start-line="48" selection-start-column="76" selection-end-line="48" selection-end-column="76" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/attach/group/service/impl/TaskServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3700">
+          <caret line="166" column="107" selection-start-line="166" selection-start-column="107" selection-end-line="166" selection-end-column="107" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/attach/sign_in/service/SignInService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="250">
+          <caret line="13" column="11" selection-start-line="13" selection-start-column="11" selection-end-line="13" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/attach/sign_in/controller/SignInController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="20" column="113" selection-start-line="20" selection-start-column="113" selection-end-line="20" selection-end-column="113" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://e7c323fa-0161-44b9-87ba-9c8b961a8514/schema/attach/table/user_group">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
     <entry file="das://e7c323fa-0161-44b9-87ba-9c8b961a8514/schema/attach/table/groups">
       <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
         <state>
@@ -915,10 +781,98 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/attach/group/service/impl/TaskServiceImpl.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/attach/group/controller/TaskController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1372">
-          <caret line="239" column="54" selection-start-line="239" selection-start-column="54" selection-end-line="239" selection-end-column="54" />
+        <state relative-caret-position="263">
+          <caret line="51" column="17" lean-forward="true" selection-start-line="51" selection-start-column="17" selection-end-line="51" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/attach/group/commons/pojo/CreateGroup.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="50">
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+          <folding>
+            <element signature="e#193#194#0" expanded="true" />
+            <element signature="e#222#223#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://e7c323fa-0161-44b9-87ba-9c8b961a8514/schema/attach/table/sign_in">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/attach/learn/commons/utils/JsonUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1103">
+          <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/attach/learn/commons/pojo/LearnResult.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="521">
+          <caret line="47" column="5" selection-start-line="47" selection-start-column="5" selection-end-line="47" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/attach/learn/controller/LearnController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-178">
+          <caret line="36" selection-start-line="36" selection-end-line="36" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1378#1379#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/attach/sign_in/commons/utils/GetId.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="175">
+          <caret line="48" column="7" selection-start-line="48" selection-start-column="7" selection-end-line="48" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/attach/sign_in/service/impl/SiginInServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="14775">
+          <caret line="608" column="72" selection-start-line="608" selection-start-column="72" selection-end-line="608" selection-end-column="72" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://e7c323fa-0161-44b9-87ba-9c8b961a8514/schema/attach/table/user">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://e7c323fa-0161-44b9-87ba-9c8b961a8514/schema/attach/table/user_learn">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://e7c323fa-0161-44b9-87ba-9c8b961a8514/schema/attach/table/day_learning_time">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/attach/learn/service/impl/UserLearnServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="372">
+          <caret line="291" column="17" lean-forward="true" selection-start-line="291" selection-start-column="17" selection-end-line="291" selection-end-column="17" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
