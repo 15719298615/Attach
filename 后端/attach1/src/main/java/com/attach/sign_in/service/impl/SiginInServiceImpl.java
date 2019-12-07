@@ -14,10 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class SiginInServiceImpl implements SignInService {
@@ -538,7 +535,8 @@ public class SiginInServiceImpl implements SignInService {
             start = signIns.get(0).getStartTime();
             end = signIns.get(0).getEndTime();
         }
-        String[] sign_in_detail_list = new String[length];
+        Map<String,List<String>> sign_in_detail_list=new HashMap<>();
+//        String[] sign_in_detail_list = new String[length];
         UserSignInExample userSignInExample1 = new UserSignInExample();
         userSignInExample1.createCriteria().andUserIdEqualTo(signInId);
         List<UserSignIn> userSignIn = userSignInMapper.selectByExample(userSignInExample1);
@@ -595,7 +593,11 @@ public class SiginInServiceImpl implements SignInService {
                     }
                     now = GetId.addDate(start, 1);
                 }
-                sign_in_detail_list[k++]=userNameList.toString()+UnuserNameList.toString();
+                List list=new ArrayList();
+                list.add(userNameList.toString());
+                list.add(UnuserNameList.toString());
+//                sign_in_detail_list[k++]=userNameList.toString()+UnuserNameList.toString();
+                sign_in_detail_list.put("day"+k++,list);
                 userNameList.clear();
                 UnuserNameList.clear();
             }

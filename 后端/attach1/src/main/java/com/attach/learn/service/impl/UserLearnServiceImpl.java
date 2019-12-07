@@ -250,7 +250,7 @@ public class UserLearnServiceImpl implements UserLearnService {
         }
         // 计算一周前开始的日期
 //            c.add(Calendar.DAY_OF_MONTH, -dayOfWeek);    //得到这周刚开始的日期。
-        c.add(Calendar.DAY_OF_MONTH, -7);
+        c.add(Calendar.DAY_OF_MONTH, -7);       //不是-7，而是-6，因为要是-7连今天算着就会8天。
 //        for (int i = 1; i < dayOfWeek; i++) {
 //            c.add(Calendar.DAY_OF_MONTH, 1);
 //        }
@@ -294,15 +294,26 @@ public class UserLearnServiceImpl implements UserLearnService {
                 if (l >= r && l <= time1) {       //这一周内的
 //                    day_learned_time_list[count++] = d.getTime();     //存放时间
                     week_total_learn_time += d.getTime();
-                    for (int i = 0; i < day_learned_time_list.length; i++) {        //从第一天开始便利length天，那天和取得的day相同就放在那天，其他的便是0了
-                        Date da = c.getTime();
-                        Date date = GetId.addDate(da, i);
-                        if (date.getDay() == Calendar.DAY_OF_YEAR) {
+                    //从第一天开始遍历length天，那天和取得的day相同就放在那天，其他的便是0了
+                    for (int i = 0; i < day_learned_time_list.length; i++) {
+                        c.add(Calendar.DAY_OF_MONTH,1);
+//                        if(sdf.parse(d.getToday()).getDay()==c.get(Calendar.DAY_OF_YEAR)){
+//                            day_learned_time_list[i] = d.getTime();
+//                        }
+
+                        Date da = c.getTime();              //c是一周前的日期。
+                        String da1 = sdf.format(da);
+                        String da2 = d.getToday();
+                        if(da1.equals(da2)){        //同一天
                             day_learned_time_list[i] = d.getTime();
                         }
-//                        if((date.getTime()/1000)==(sdf.parse(d.getToday()).getTime()/1000)){
+//                        Date date = GetId.addDate(da, i);       //给一周前的日期开始加
+//                        if (date.getDay() == Calendar.DAY_OF_YEAR) {
+//                            day_learned_time_list[i] = d.getTime();
 //                        }
+//           if((date.getTime()/1000)==(sdf.parse(d.getToday()).getTime()/1000)){       //不能够判断是同一天,两个秒肯定不一样
                     }
+                    c.add(Calendar.DAY_OF_MONTH,-(day_learned_time_list.length-1));
                 }
             }
             average_learned_time = ((double) week_total_learn_time / day_learned_time_list.length);
@@ -565,14 +576,14 @@ public class UserLearnServiceImpl implements UserLearnService {
         List<DayLearningTime> dayLearningTimes = dayLearningTimeMapper.selectByExample(dayLearningTimeExample);
         if (dayLearningTimes != null && dayLearningTimes.size() > 0) {
             //得到到目前为止所学习时间
-//            for (DayLearningTime d : dayLearningTimes) {
-//                Integer time = d.getTime() ;
-//                all += time;          //总共有多少时间    用于计算概率
-//            }
+            for (DayLearningTime d : dayLearningTimes) {
+                Integer time = d.getTime() ;
+                all += time;          //总共有多少时间    用于计算概率
+            }
 //            count = dayLearningTimes.size();  ///学习了多少天。
             count = GetId.getTimeDistance(sdf.parse(dayLearningTimes.get(0).getToday()),sdf.parse(dayLearningTimes.get(dayLearningTimes.size()-1).getToday()));
         }
-//        all=all/60;         //精确到分钟
+        all=all/60;         //精确到分钟
 //        int index = c.get(Calendar.DAY_OF_YEAR) - count + 1;
         //学习时段分布百分比，精确到一天的每分
         UserLearnExample userLearnExample = new UserLearnExample();
@@ -584,35 +595,36 @@ public class UserLearnServiceImpl implements UserLearnService {
         Calendar cal1 = Calendar.getInstance();
         cal1.setTime(new Date(userLearns.get(0).getStartTime()));     //第一天
         if (userLearns != null && userLearns.size() > 0) {
+            //直接把所有的全部便利一边。
+//            for (UserLearn u : userLearns) {
+//            }
             if (value <= count) {//遍历所有天的学习情况。
                 cal1.setTime(GetId.addDate(cal1.getTime(), value++));//每次增加value天，因为每次都是第一天，开始，所以第一次也是增加0天
-                //遍历到目前为止的所有学习时长    找到里面的学习时间放入map   每次让value+1
+//                遍历到目前为止的所有学习时长    找到里面的学习时间放入map   每次让value+1
                 for (UserLearn u : userLearns) {
-//                    Calendar cal2 = Calendar.getInstance();
-//                    cal2.setTime(new Date(u.getStartTime()));       //便利这个人学习的时间。
-//                    if (cal1.get(0) == cal2.get(0) && cal1.get(1) == cal2.get(1) && cal1.get(6) == cal2.get(6)) {   //同一天
-//                        Long startTime = u.getStartTime() / 1000;          //s
-//                        Long endTime = u.getEndTime() / 1000;
-//                        long s = startTime % 86400 / 60;           //一天86400秒，%86400是为了得到今天的时间，我要得到今天的多少分。
-//                        long e = endTime % 86400 / 60;
-////                        now.setTime(startTime * 1000);
-//                        //开始遍历从开始到结束，把那会的时间赋值为多少,
-//                        while (s <= e) {
-//                            temp[(int) s] += 1;     //将这会学习的放在学习时间里面。
-//                            s++;
-//                        }
-//                    }else{      //不是同一天，就继续找。
-//                        continue;
-//                    }
-                    Long startTime = u.getStartTime() / 1000;          //s
-                    Long endTime = u.getEndTime() / 1000;
-                    long s = startTime % 86400 / 60;           //一天86400秒，%86400是为了得到今天的时间，我要得到今天的多少分。
-                    long e = endTime % 86400 / 60;
-                    while (s <= e) {
-                        temp[(int) s] += 1;     //将这会学习的放在学习时间里面。
-                        s++;
-                    }
-                    //不是同一天,就直接退出，继续找下一天。后面都不可能是同一天，所以找到不是同一天的就直接退出。
+                long x=u.getStartTime()/1000%86400/60;
+                long y=u.getEndTime()/1000%86400/60;
+                while (x<y){
+                    temp[(int) x] += 1;     //将这会学习的放在学习时间里面。
+                    x++;
+                }
+/*                    Calendar cal2 = Calendar.getInstance();
+                    cal2.setTime(new Date(u.getStartTime()));       //便利这个人学习的时间。
+                    if (cal1.get(0) == cal2.get(0) && cal1.get(1) == cal2.get(1) && cal1.get(6) == cal2.get(6)) {   //同一天
+                        Long startTime = u.getStartTime() / 1000;          //s
+                        Long endTime = u.getEndTime() / 1000;
+                        long s = startTime % 86400 / 60;           //一天86400秒，%86400是为了得到今天的时间，我要得到今天的多少分。
+                        long e = endTime % 86400 / 60;
+//                        now.setTime(startTime * 1000);
+                        //开始遍历从开始到结束，把那会的时间赋值为多少,
+                        while (s <= e) {
+                            temp[(int) s] += 1;     //将这会学习的放在学习时间里面。
+                            s++;
+                        }
+                    }else{      //不是同一天，就继续找。
+                        continue;
+                    }*/
+//                    不是同一天,就直接退出，继续找下一天。后面都不可能是同一天，所以找到不是同一天的就直接退出。
 //                    if (cal1.get(0) == cal2.get(0) && cal1.get(1) == cal2.get(1) && cal1.get(6) != cal2.get(6)) {
 //                        //因为要是第二天的话就直接退出了，所以没加上。问题在这。
 //                        break;
@@ -621,16 +633,24 @@ public class UserLearnServiceImpl implements UserLearnService {
             }
         }
         //得到所有时间。
+        int all2=0;
+        int all3=0;
         for (int i = 0; i < temp.length; i++) {
-            all += temp[i];
+            all2 += temp[i];
         }
         //学习时段分布百分比,遍历day的表，查找不是0的
-        if (all != 0) {
+        if(all==all2){
+            all3=all;
+        }else{
+            all3=all2;
+        }
+        if (all3 != 0) {
             for (int j = 0; j < temp.length; j++) {
                 if (temp[j] == 0) {
                     continue;
                 } else {
-                    day[j] = ( (double) temp[j] / (double) all);
+
+                    day[j] = (temp[j] / (double) all3);
                 }
             }
         } else {
