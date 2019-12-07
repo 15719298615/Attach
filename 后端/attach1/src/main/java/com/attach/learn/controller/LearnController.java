@@ -50,13 +50,13 @@ public class LearnController {
 
     @RequestMapping(value ="get-all-record" , produces="application/json;charset=utf-8")
     @ResponseBody
-    public String get_all_record(Integer userId){
+    public String get_all_record(Integer userId) throws ParseException {
         return userLearnServiceImpl.get_all_record(userId);
     }
 
     @RequestMapping(value ="get-time-slot" , produces="application/json;charset=utf-8")
     @ResponseBody
-    public String get_time_slot(Integer userId){
+    public String get_time_slot(Integer userId) throws ParseException {
         return userLearnServiceImpl.get_time_slot(userId);
     }
 

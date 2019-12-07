@@ -379,9 +379,10 @@ public class TaskServiceImpl implements TaskService {
                 if(userDayTasks!=null&&userDayTasks.size()>0){
                     taskDetailList.setTaskId(task.getId());
                     taskDetailList.setTaskCount(userDayTasks.size());
+                    taskDetailList.setTaskName(task.getTaskName());
                     taskDetailLists.add(taskDetailList);
                 }else {
-                    return JsonUtils.objectToJson("fail");
+                    continue;
                 }
             }
             return JsonUtils.objectToJson(taskDetailLists);

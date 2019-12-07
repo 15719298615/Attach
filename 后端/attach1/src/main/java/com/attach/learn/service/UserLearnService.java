@@ -44,12 +44,12 @@ public interface UserLearnService {
      * @param userId    用户id
      * @return   LearnResult.toString()
      */
-    String get_all_record(Integer userId);
+    String get_all_record(Integer userId)throws ParseException;
 
     /**
      * 获取学习时间段分析
      * @param userId    用户id
      * @return    学习时段分布百分比，精确到一天的每分。
      */
-    String get_time_slot(Integer userId);
+    String get_time_slot(Integer userId) throws ParseException ;
 }
