@@ -293,27 +293,21 @@ public class UserLearnServiceImpl implements UserLearnService {
                 }
                 if (l >= r && l <= time1) {       //这一周内的
 //                    day_learned_time_list[count++] = d.getTime();     //存放时间
+                    int p=0;
                     week_total_learn_time += d.getTime();
                     //从第一天开始遍历length天，那天和取得的day相同就放在那天，其他的便是0了
                     for (int i = 0; i < day_learned_time_list.length; i++) {
-                        c.add(Calendar.DAY_OF_MONTH,1);
-//                        if(sdf.parse(d.getToday()).getDay()==c.get(Calendar.DAY_OF_YEAR)){
-//                            day_learned_time_list[i] = d.getTime();
-//                        }
-
                         Date da = c.getTime();              //c是一周前的日期。
-                        String da1 = sdf.format(da);
-                        String da2 = d.getToday();
+                        String da1 = sdf.format(da);        //一周前日期的时间。
+                        String da2 = d.getToday();          //从学习表中遍历的时间，
                         if(da1.equals(da2)){        //同一天
                             day_learned_time_list[i] = d.getTime();
                         }
-//                        Date date = GetId.addDate(da, i);       //给一周前的日期开始加
-//                        if (date.getDay() == Calendar.DAY_OF_YEAR) {
-//                            day_learned_time_list[i] = d.getTime();
-//                        }
+                        c.add(Calendar.DAY_OF_MONTH,1);
+                        p++;
 //           if((date.getTime()/1000)==(sdf.parse(d.getToday()).getTime()/1000)){       //不能够判断是同一天,两个秒肯定不一样
                     }
-                    c.add(Calendar.DAY_OF_MONTH,-(day_learned_time_list.length-1));
+                    c.add(Calendar.DAY_OF_MONTH,-p);
                 }
             }
             average_learned_time = ((double) week_total_learn_time / day_learned_time_list.length);
