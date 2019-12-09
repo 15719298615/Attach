@@ -10,16 +10,16 @@ import java.util.Arrays;
  */
 
 public class LearnResult {
-    private int[] day_learned_time_list;
+    private double[] day_learned_time_list;
     private int total_learned;
     private double average_learned_time;
     private double beat_people_percent;
 
-    public int[] getDay_learned_time_list() {
+    public double[] getDay_learned_time_list() {
         return day_learned_time_list;
     }
 
-    public void setDay_learned_time_list(int[] day_learned_time_list) {
+    public void setDay_learned_time_list(double[] day_learned_time_list) {
         this.day_learned_time_list = day_learned_time_list;
     }
 

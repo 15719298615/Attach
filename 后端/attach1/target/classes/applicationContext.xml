@@ -49,6 +49,6 @@
     <!-- 配置aop -->
     <aop:config>
         <aop:pointcut expression="execution(* com.attach.*.service.impl.*.*(..))" id="mypoint"/>
-        <aop:advisor advice-ref="txAdvice" pointcut-ref="mypoint"/>
+         <aop:advisor advice-ref="txAdvice" pointcut-ref="mypoint"/>
     </aop:config>
 </beans>
