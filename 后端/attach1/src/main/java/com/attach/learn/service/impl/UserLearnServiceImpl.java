@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -34,7 +36,7 @@ public class UserLearnServiceImpl implements UserLearnService {
     private UserMapper userMapper;
 
     @Override
-    public int get_today_learn_time(Integer userId) {
+    public double get_today_learn_time(Integer userId) {
         if (userId == null) {
             return 0;
         }
@@ -44,7 +46,7 @@ public class UserLearnServiceImpl implements UserLearnService {
         if (users == null || users.size() <= 0) {
             return 0;
         }
-        Integer all = 0;
+        double all = 0.0;
 //            //得到今天的日期，再在每日学习里面遍历这个userid的学习时间
 //            GregorianCalendar calendar=new GregorianCalendar();
 //            int year=calendar.get(calendar.YEAR);
@@ -69,7 +71,7 @@ public class UserLearnServiceImpl implements UserLearnService {
         List<DayLearningTime> dayLearningTimes = dayLearningTimeMapper.selectByExample(dayLearningTimeExample);
         if (dayLearningTimes != null && dayLearningTimes.size() > 0) {
             for (DayLearningTime d : dayLearningTimes) {
-                all += d.getTime();
+                all += (double)d.getTime()/3600;
             }
         }
         return all;
@@ -204,13 +206,15 @@ public class UserLearnServiceImpl implements UserLearnService {
             for (UserLearn u : userLearns) {
                 Long startTime = u.getStartTime() / 1000;
                 if (u.getEndTime() == null && u.getStartTime() > c.getTimeInMillis()) {    //今天6点开始后开始的学习。
-                    all = (c.getTimeInMillis() - u.getStartTime()) / 1000;
-                    StringBuilder stringBuilder = new StringBuilder();
-                    long hours = all / 3600;
-                    long minites = (all - 3600 * hours) / 60;
-                    long seconds = (all - 3600 * hours - 60 * minites) % 60;
-                    stringBuilder.append("learning,学习时长").append(":").append(hours).append(".").append(minites).append(".").append(seconds);
-                    return JsonUtils.objectToJson(stringBuilder);
+//                    Date now=new Date();
+//                    all = (now.getTime() - u.getStartTime()) / 1000;
+//                    StringBuilder stringBuilder = new StringBuilder();
+//                    long hours = all / 3600;
+//                    long minites = (all - 3600 * hours) / 60;
+//                    long seconds = (all - 3600 * hours - 60 * minites) % 60;
+//                    stringBuilder.append("learning,学习时长").append(":").append(hours).append(".").append(minites).append(".").append(seconds);
+//                    return JsonUtils.objectToJson(stringBuilder);
+                    return JsonUtils.objectToJson("learning");
                 } else {
                     continue;
                 }
@@ -257,7 +261,7 @@ public class UserLearnServiceImpl implements UserLearnService {
         //初始化
         LearnResult learnResult = new LearnResult();
         double[] day_learned_time_list = null;
-        int week_total_learn_time = 0;
+        double week_total_learn_time = 0.0;
         double average_learned_time = 0.0;
         double beat_people_percent = 0.0;
         int count = 0;
@@ -294,7 +298,6 @@ public class UserLearnServiceImpl implements UserLearnService {
                 if (l >= r && l <= time1) {       //这一周内的
 //                    day_learned_time_list[count++] = d.getTime();     //存放时间
                     int p = 0;
-                    week_total_learn_time += d.getTime()/3600;
                     //从第一天开始遍历length天，那天和取得的day相同就放在那天，其他的便是0了
                     for (int i = 0; i < day_learned_time_list.length; i++) {
                         Date da = c.getTime();              //c是一周前的日期。
@@ -302,6 +305,7 @@ public class UserLearnServiceImpl implements UserLearnService {
                         String da2 = d.getToday();          //从学习表中遍历的时间，
                         if (da1.equals(da2)) {        //同一天
                             day_learned_time_list[i] = (double)d.getTime() / 3600;        //转换为小时。
+                            week_total_learn_time += (double)d.getTime()/3600;
                         }
                         c.add(Calendar.DAY_OF_MONTH, 1);
                         p++;
@@ -366,17 +370,18 @@ public class UserLearnServiceImpl implements UserLearnService {
                         total += (double)d.getTime() / 3600;
                     }
                 }
-                allIdRate[n++] = ((double) total / (double) xlength);    //每个人的平均学习时间是总共的除以这一周的天数
+                allIdRate[n++] = (double)total;             //每个人这周的所有时间。比较每个人的所有学习时间
+//                allIdRate[n++] = ((double) total / (double) xlength);    //每个人的平均学习时间是总共的除以这一周的天数
             }
         }
         //求打败百分比
         int many = 0;
         if (allIdRate != null && allIdRate.length > 0) {        //有其他人
             for (Double d : allIdRate) {
-                if (average_learned_time == 0.0) {
+                if (week_total_learn_time == 0.0) {
                     beat_people_percent = 0.0;
                 } else {
-                    if (average_learned_time > d) {
+                    if (week_total_learn_time > d) {
                         many++;
                     }
                 }
@@ -415,7 +420,7 @@ public class UserLearnServiceImpl implements UserLearnService {
         //初始化
         LearnResult learnResult = new LearnResult();
         double[] day_learned_time_list = null;
-        int total_learned = 0;
+        double total_learned = 0;
         double average_learned_time = 0.0;
         double beat_people_percent = 0.0;
         int count = 0;
@@ -474,8 +479,8 @@ public class UserLearnServiceImpl implements UserLearnService {
                 }
             }
         }
-        //求所有人的平均时间
-        Double[] allId = new Double[number];
+        //求所有人的所有时间
+        Double[] allIdTime = new Double[number];
         for (Integer i : UserId) {
             DayLearningTimeExample dayLearningTimeExample3 = new DayLearningTimeExample();
             if (i != null) {       //userid不为空,就遍历他的学习时间。
@@ -484,12 +489,13 @@ public class UserLearnServiceImpl implements UserLearnService {
                 int n = 0;
                 int nowCount = dayLearningTimes2.size();
                 int nowIndex = c.get(Calendar.DAY_OF_YEAR) - nowCount + 1;
-                int total = 0;
+                double total = 0.0;
                 for (DayLearningTime d : dayLearningTimes2) {
-                    Integer time = d.getTime();
+                    double time = d.getTime()/3600;
                     total += time;
                 }
-                allId[n] = (total / (double) nowCount);
+                allIdTime[n] = (double)total;
+                allIdTime[n] = (total / (double) nowCount);
             }
         }
         //求打败百分比
@@ -512,18 +518,18 @@ public class UserLearnServiceImpl implements UserLearnService {
 //                }
 //            }
 //        }
-        if (allId != null && allId.length > 0) {        //有其他人
-            for (Double d : allId) {
-                if (average_learned_time == 0.0) {
+        if (allIdTime != null && allIdTime.length > 0) {        //有其他人
+            for (Double d : allIdTime) {
+                if (total_learned == 0.0) {
                     beat_people_percent = 0.0;
                     average_learned_time = 0.0;
                 } else {
-                    if (average_learned_time > d) {
+                    if (total_learned > d) {
                         many++;
                     }
                 }
             }
-            beat_people_percent = ((double) many / (double) (allId.length)) * 100;
+            beat_people_percent = ((double) many / (allIdTime.length)) * 100;
         } else {      //没有其他人，只有一个人。
             beat_people_percent = 100.0;
         }

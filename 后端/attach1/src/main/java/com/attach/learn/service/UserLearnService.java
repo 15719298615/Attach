@@ -10,7 +10,7 @@ public interface UserLearnService {
      * @param userId      用户id
      * @return   今日学习时长  int
      */
-    int get_today_learn_time(Integer userId);
+    double get_today_learn_time(Integer userId);
     /**
      *开始计时
      * @param userId    用户id

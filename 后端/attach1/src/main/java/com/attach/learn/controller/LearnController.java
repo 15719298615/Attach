@@ -15,7 +15,7 @@ public class LearnController {
 
     @RequestMapping(value ="get-today-learn-time" , produces="application/json;charset=utf-8")
     @ResponseBody
-    public int get_today_learn_time(Integer userId){
+    public double get_today_learn_time(Integer userId){
         return userLearnServiceImpl.get_today_learn_time(userId);
     }
 

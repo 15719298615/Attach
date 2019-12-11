@@ -11,7 +11,7 @@ import java.util.Arrays;
 
 public class LearnResult {
     private double[] day_learned_time_list;
-    private int total_learned;
+    private double total_learned;
     private double average_learned_time;
     private double beat_people_percent;
 
@@ -23,8 +23,12 @@ public class LearnResult {
         this.day_learned_time_list = day_learned_time_list;
     }
 
-    public int getTotal_learned() {
+    public double getTotal_learned() {
         return total_learned;
+    }
+
+    public void setTotal_learned(double total_learned) {
+        this.total_learned = total_learned;
     }
 
     public void setTotal_learned(int total_learned) {
