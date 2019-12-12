@@ -1,5 +1,6 @@
 package com.attach.group.commons.pojo;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class MemberDetail {
@@ -8,6 +9,16 @@ public class MemberDetail {
     private int taskNum;
     private int dayNum;
     private Date startDate;
+    private ArrayList<String> taskName;
+
+
+    public ArrayList<String> getTaskName() {
+        return taskName;
+    }
+
+    public void setTaskName(ArrayList<String> taskName) {
+        this.taskName = taskName;
+    }
 
     public int getTaskNum() {
         return taskNum;

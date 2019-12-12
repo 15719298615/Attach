@@ -325,7 +325,9 @@ public class TaskServiceImpl implements TaskService {
                     Double num = 0.0;
                     Double totalComplete = null;
                     int timeDistance = GetId.getTimeDistance(groups.get(0).getStartTime(), groups.get(0).getEndTime())+1;
+                    ArrayList<String> taskName = new ArrayList<>();
                     for(Task task:tasks){
+                        taskName.add(task.getTaskName());
                         UserDayTaskExample userDayTaskExample = new UserDayTaskExample();
                         userDayTaskExample.createCriteria().andTaskIdEqualTo(task.getId()).andCompleteEqualTo((byte)1).andUserIdEqualTo(userId);
                         List<UserDayTask> userDayTasks = userDayTaskMapper.selectByExample(userDayTaskExample);
@@ -350,6 +352,7 @@ public class TaskServiceImpl implements TaskService {
                         }
                     }
                     MemberDetail memberDetail = new MemberDetail();
+                    memberDetail.setTaskName(taskName);
                     memberDetail.setTaskNum(tasks.size());
                     memberDetail.setDayNum(timeDistance);
                     memberDetail.setStartDate(groups.get(0).getStartTime());
