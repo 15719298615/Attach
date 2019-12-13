@@ -407,7 +407,32 @@ public class SiginInServiceImpl implements SignInService {
                                     participate.setSignInTime(GetId.getNowTime());
                                     int index = participateMapper.insert(participate);
                                     if (index > 0) {
-                                        return JsonUtils.objectToJson("success");
+                                        //往这个任务的总签到人数里面加入即可。
+                                        StatisticsExample statisticsExample =new StatisticsExample();
+                                        statisticsExample.createCriteria().andSignInIdEqualTo(signInId).andIdEqualTo(userId);
+                                        List<Statistics> statistics = statisticsMapper.selectByExample(statisticsExample);
+                                        if(statistics.size()>0 && statistics!=null){
+                                            Statistics statistics1=new Statistics();
+                                            statistics1.setId(statistics.get(0).getId());
+                                            statistics1.setCount(statistics.get(0).getCount()+1);
+                                            statistics1.setSignInId(signInId);
+                                            int i = statisticsMapper.updateByExample(statistics1, statisticsExample);
+                                            if(i>0){
+                                                return JsonUtils.objectToJson("success");
+                                            }else{
+                                                return JsonUtils.objectToJson("fail");      //没有更新，在任务每日情况表中
+                                            }
+                                        }else{
+                                            Statistics statistics1=new Statistics();
+                                            statistics1.setCount(1);
+                                            statistics1.setSignInId(signInId);
+                                            int insert = statisticsMapper.insert(statistics1);
+                                            if(insert>0){
+                                                return JsonUtils.objectToJson("success");
+                                            }else{
+                                                return JsonUtils.objectToJson("fail");      //没有插入进去，在任务每日情况表中
+                                            }
+                                        }
                                     } else {
                                         return JsonUtils.objectToJson("fail");    //插入失败
                                     }
@@ -451,8 +476,14 @@ public class SiginInServiceImpl implements SignInService {
     @Override
     public String my_sign_in_detail(Integer userId, Integer signInId) {
         SignDetailResult result = new SignDetailResult();
-
         if (userId == null || signInId == null) {
+            return JsonUtils.objectToJson("fail");
+        }
+        //看有没有这个人
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andUserIdEqualTo(userId);
+        List<User> users = userMapper.selectByExample(userExample);
+        if (users == null || users.size() <= 0) {
             return JsonUtils.objectToJson("fail");
         }
         //初始化
@@ -462,54 +493,101 @@ public class SiginInServiceImpl implements SignInService {
         int total_num = 0;
         Date[] effective_date_list = null;
         Date[] total_date_list = null;
-        //判断是否参与这个签到表
-        UserSignInExample userSignInExample=new UserSignInExample();
-        userSignInExample.createCriteria().andUserIdEqualTo(userId).andSignInIdEqualTo(signInId);
-        List<UserSignIn> userSignIns = userSignInMapper.selectByExample(userSignInExample);
-        if(userSignIns.size()>0 && userSignIns!=null){
-            //寻找这个用户签到的次数--sign_in_num
-                SignInExample signInExample = new SignInExample();
-                signInExample.createCriteria().andSignInIdEqualTo(signInId);
-                List<SignIn> signIns = signInMapper.selectByExample(signInExample);
-                if (signIns != null && signIns.size() > 0) {
-                    ParticipateExample participateExample = new ParticipateExample();
-                    participateExample.createCriteria().andUserIdEqualTo(userId).andSignInIdEqualTo(signInId);
-                    List<Participate> participates = participateMapper.selectByExample(participateExample);
-                    if (participates != null && participates.size() > 0) {
-                        sign_in_num = participates.size();
-                        effective_date_list = new Date[sign_in_num];
-                        //这个任务的签到范围，就是总共的签到日期。
-                        total_num = GetId.getTimeDistance(signIns.get(0).getStartTime(), signIns.get(0).getEndTime()) + 1;
-                        total_date_list = new Date[GetId.getTimeDistance(signIns.get(0).getStartTime(), signIns.get(0).getEndTime()) + 1];
-                        for (int i = 0; i < total_date_list.length; i++) {
+
+        //寻找这个用户签到的次数--sign_in_num
+        SignInExample signInExample = new SignInExample();
+        signInExample.createCriteria().andSignInIdEqualTo(signInId);
+        List<SignIn> signIns = signInMapper.selectByExample(signInExample);
+
+        //查看这给任务的情况。
+        if (signIns != null && signIns.size() > 0) {
+            //这个任务的签到范围，就是总共的签到日期。
+            total_num = GetId.getTimeDistance(signIns.get(0).getStartTime(), signIns.get(0).getEndTime()) + 1;
+            total_date_list = new Date[GetId.getTimeDistance(signIns.get(0).getStartTime(), signIns.get(0).getEndTime()) + 1];
+            for (int i = 0; i < total_date_list.length; i++) {
 //                    Date date = GetId.addDate(signIns.get(0).getStartTime(), i);
-                            total_date_list[i] = GetId.addDate(signIns.get(0).getStartTime(), i);
-                        }
-                        for (Participate p : participates) {
-                            if (p.getSignInTime().getTime() >= signIns.get(0).getStartTime().getTime() && p.getSignInTime().getTime() <= signIns.get(0).getEndTime().getTime()) {
-                                effective_date_list[count] = p.getSignInTime();
-                                count++;
+                total_date_list[i] = GetId.addDate(signIns.get(0).getStartTime(), i);
+            }
+            //判断这个人是否参与这个签到表
+            UserSignInExample userSignInExample=new UserSignInExample();
+            userSignInExample.createCriteria().andUserIdEqualTo(userId).andSignInIdEqualTo(signInId);
+            List<UserSignIn> userSignIns = userSignInMapper.selectByExample(userSignInExample);
+            if(userSignIns.size()>0 && userSignIns!=null){
+                //看有没有人参与签到。
+                ParticipateExample participateExample = new ParticipateExample();
+                participateExample.createCriteria().andUserIdEqualTo(userId).andSignInIdEqualTo(signInId);
+                List<Participate> participates = participateMapper.selectByExample(participateExample);
+                if (participates != null && participates.size() > 0) {
+                    sign_in_num = participates.size();
+                    effective_date_list = new Date[sign_in_num];
+                    for (Participate p : participates) {
+                        //签到日期在范围内。
+                        if (p.getSignInTime().getTime() >= signIns.get(0).getStartTime().getTime() && p.getSignInTime().getTime() <= signIns.get(0).getEndTime().getTime()) {
+                            effective_date_list[count] = p.getSignInTime();
+                            count++;
 //                    sign_in_num++;
-                            }
                         }
                     }
-                    result.setSignInNum(sign_in_num);
-                    result.setTotalNum(total_num);
-                    result.setEffectiveDateList(effective_date_list);
-                    result.setTotalDateList(total_date_list);
-                    }
-            return JsonUtils.objectToJson(result);
-        }else{
-            //根本没有参与这个签到任务
-            return JsonUtils.objectToJson("fail");
+                }
+            }
+            result.setSignInNum(sign_in_num);
+            result.setTotalNum(total_num);
+            result.setEffectiveDateList(effective_date_list);
+            result.setTotalDateList(total_date_list);
         }
+        return JsonUtils.objectToJson(result);
+
+
+//
+//        //判断这个人是否参与这个签到表
+//        UserSignInExample userSignInExample=new UserSignInExample();
+//        userSignInExample.createCriteria().andUserIdEqualTo(userId).andSignInIdEqualTo(signInId);
+//        List<UserSignIn> userSignIns = userSignInMapper.selectByExample(userSignInExample);
+//        if(userSignIns.size()>0 && userSignIns!=null){
+//            //寻找这个用户签到的次数--sign_in_num
+//                SignInExample signInExample = new SignInExample();
+//                signInExample.createCriteria().andSignInIdEqualTo(signInId);
+//                List<SignIn> signIns = signInMapper.selectByExample(signInExample);
+//                if (signIns != null && signIns.size() > 0) {
+//                    //这个任务的签到范围，就是总共的签到日期。
+//                    total_num = GetId.getTimeDistance(signIns.get(0).getStartTime(), signIns.get(0).getEndTime()) + 1;
+//                    total_date_list = new Date[GetId.getTimeDistance(signIns.get(0).getStartTime(), signIns.get(0).getEndTime()) + 1];
+//                    for (int i = 0; i < total_date_list.length; i++) {
+////                    Date date = GetId.addDate(signIns.get(0).getStartTime(), i);
+//                        total_date_list[i] = GetId.addDate(signIns.get(0).getStartTime(), i);
+//                    }
+//                    //看有没有人参与签到。
+//                    ParticipateExample participateExample = new ParticipateExample();
+//                    participateExample.createCriteria().andUserIdEqualTo(userId).andSignInIdEqualTo(signInId);
+//                    List<Participate> participates = participateMapper.selectByExample(participateExample);
+//                    if (participates != null && participates.size() > 0) {
+//                        sign_in_num = participates.size();
+//                        effective_date_list = new Date[sign_in_num];
+//                        for (Participate p : participates) {
+//                            if (p.getSignInTime().getTime() >= signIns.get(0).getStartTime().getTime() && p.getSignInTime().getTime() <= signIns.get(0).getEndTime().getTime()) {
+//                                effective_date_list[count] = p.getSignInTime();
+//                                count++;
+////                    sign_in_num++;
+//                            }
+//                        }
+//                    }
+//                    result.setSignInNum(sign_in_num);
+//                    result.setTotalNum(total_num);
+//                    result.setEffectiveDateList(effective_date_list);
+//                    result.setTotalDateList(total_date_list);
+//                    }
+//            return JsonUtils.objectToJson(result);
+//        }else{
+//            //根本没有参与这个签到任务
+//            return JsonUtils.objectToJson("fail");
+//        }
     }
 
 
     @Override
     public String get_sign_in_detail(Integer signInId) {
         if (signInId == null) {
-            return JsonUtils.objectToJson("status:[fail]");
+            return JsonUtils.objectToJson("fail");
         }
         signinDetailResult Result = new signinDetailResult();
         int all = 0;
@@ -521,12 +599,14 @@ public class SiginInServiceImpl implements SignInService {
         List AlluserIdList = new ArrayList();
         List<String> userNameList = new ArrayList();
         List<String> UnuserNameList = new ArrayList();
+        List<String> AlluserNameList = new ArrayList();
+
         int[] everyday_number = null;
         SignInExample signInExample = new SignInExample();
         signInExample.createCriteria().andSignInIdEqualTo(signInId);
         List<SignIn> signIns = signInMapper.selectByExample(signInExample);
         int length = 0;
-        int k = 0;
+        int k = 1;
         int body = 0;
         Date start = null;
         Date end = null;
@@ -535,15 +615,16 @@ public class SiginInServiceImpl implements SignInService {
             start = signIns.get(0).getStartTime();
             end = signIns.get(0).getEndTime();
         }
-        Map<String,List<String>> sign_in_detail_list=new HashMap<>();
+        Map<String,Map<String,List<String>>> sign_in_detail_list=new HashMap<>();
 //        String[] sign_in_detail_list = new String[length];
         UserSignInExample userSignInExample1 = new UserSignInExample();
-        userSignInExample1.createCriteria().andUserIdEqualTo(signInId);
+        userSignInExample1.createCriteria().andSignInIdEqualTo(signInId);
         List<UserSignIn> userSignIn = userSignInMapper.selectByExample(userSignInExample1);
         if (userSignIn != null && userSignIn.size() > 0) {   //参与这个活动的人
             body = userSignIn.size();
+            All = length * body;             //每天需要签到的和多少天相乘即可。
         }
-        All = length * body;             //每天需要签到的和多少天相乘即可。
+        System.out.println(body);
         StatisticsExample statisticsExample=new StatisticsExample();
         statisticsExample.createCriteria().andSignInIdEqualTo(signInId);     //参与任务每日统计，多少条就是多少天。
         List<Statistics> result = statisticsMapper.selectByExample(statisticsExample);
@@ -557,7 +638,25 @@ public class SiginInServiceImpl implements SignInService {
             }
         }
         Result.setEveryday_number(everyday_number);
-        Date now=start;
+        //得到所有人的id和名字,只要一次就行，放在循环里面由好多此。
+        UserSignInExample userSignInExample=new UserSignInExample();
+        userSignInExample.createCriteria().andSignInIdEqualTo(signInId);        //得到这个任务的参与人。
+        List<UserSignIn> userSignIns = userSignInMapper.selectByExample(userSignInExample);
+        if(userSignIns!=null && userSignIns.size()>0){
+            for(UserSignIn u:userSignIns){
+                Integer userSignId = u.getUserId();
+                AlluserIdList.add(userSignId);
+                UserExample userExample1=new UserExample();
+                userExample1.createCriteria().andUserIdEqualTo(userSignId);
+                List<User> users1 = userMapper.selectByExample(userExample1);
+                if(users1.size()>0 && users1!=null){
+                    for (User us:users1){
+                        AlluserNameList.add(us.getUserName());//得到，名字
+                    }
+                }
+            }
+        }
+        Date now=start;         //每次加一天。
         if(result!=null && result.size()>0){     //签到并且是这天的
             for (Statistics s:result){
                 if(now.getTime()<end.getTime()){
@@ -576,35 +675,68 @@ public class SiginInServiceImpl implements SignInService {
                                 for (User u:users){
                                     String userName = u.getUserName();
                                     userNameList.add(userName);
+//                                    AlluserNameList.add(userName);
                                 }
                                 userIdList.add(userPaId);
                             }
-
-                            UserSignInExample userSignInExample=new UserSignInExample();
-                            userSignInExample.createCriteria().andUserIdEqualTo(userPaId);
-                            List<UserSignIn> userSignIns = userSignInMapper.selectByExample(userSignInExample);
-                            if(userSignIns!=null && userSignIns.size()>0){
-                                for(UserSignIn u:userSignIns){
-                                    Integer userSignId = u.getUserId();
-                                    AlluserIdList.add(userSignId);
-                                }
-                            }
+//                            //得到所有人的id和名字
+//                            UserSignInExample userSignInExample=new UserSignInExample();
+//                            userSignInExample.createCriteria().andSignInIdEqualTo(signInId);        //得到这个任务的参与人。
+//                            List<UserSignIn> userSignIns = userSignInMapper.selectByExample(userSignInExample);
+//                            if(userSignIns!=null && userSignIns.size()>0){
+//                                for(UserSignIn u:userSignIns){
+//                                    Integer userSignId = u.getUserId();
+//                                    AlluserIdList.add(userSignId);
+//                                    UserExample userExample1=new UserExample();
+//                                    userExample1.createCriteria().andUserIdEqualTo(userSignId);
+//                                    List<User> users1 = userMapper.selectByExample(userExample1);
+//                                    if(users1.size()>0 && users1!=null){
+//                                        for (User us:users1){
+//                                            AlluserNameList.add(us.getUserName());//得到，名字
+//                                        }
+//                                    }
+//                                }
+//                            }
                         }
                     }
-                    now = GetId.addDate(start, 1);
+                    now = GetId.addDate(now, 1);
                 }
+                //每次复制。/这样所有人的就不用变了，变得时复制品。
+                for(String u:AlluserNameList){
+                    UnuserNameList.add(u);
+                }
+                //移出所有签到的就是没有签到的
+                for(String u:userNameList){
+                    UnuserNameList.remove(u);
+                }
+                Map<String,List<String>> map=new HashMap();
                 List list=new ArrayList();
                 list.add(userNameList.toString());
-                list.add(UnuserNameList.toString());
+                List list2=new ArrayList();
+                list2.add(UnuserNameList.toString());
 //                sign_in_detail_list[k++]=userNameList.toString()+UnuserNameList.toString();
-                sign_in_detail_list.put("day"+k++,list);
+                map.put("unsignInList",list2);
+                map.put("signInList",list);
+                sign_in_detail_list.put("day"+k++,map);
                 userNameList.clear();
                 UnuserNameList.clear();
+            }
+        }else{          //没有人签到这个任务。就直接放空就可以。
+            for(int i=0;i<length;i++){
+                Map<String,List<String>> map=new HashMap();
+                List list=new ArrayList();
+                List list2=new ArrayList();
+                list.add("[]");
+                list2.add("[]");
+                map.put("signInList",list);
+                map.put("unsignInList",list2);
+                sign_in_detail_list.put("day"+k++,map);
             }
         }
 
 
-        rate=((double) all/(double) All);
+        rate=((double) all/ All)*100;
+        System.out.println(rate);
         AlluserIdList.removeAll(userIdList);       //从总的id中去掉签到的就是没签到的。
         for(Object id:AlluserIdList){           //遍历user得到他的名字，放入未签到表中。
             UserExample userExample=new UserExample();
