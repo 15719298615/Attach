@@ -10,8 +10,10 @@ import java.util.Map;
 public class signinDetailResult {
 
 //    private  String[] sign_in_detail_list;
-    private Map<String,Map<String,List<String>>> sign_in_detail_list;
+//    private Map<String,Map<String,List<String>>> sign_in_detail_list;
 
+//    private SignInDetailListResult sign_in_detail_list;
+    private List<SignInDetailListResult> sign_in_detail_list;
     private double sign_in_rate;      //总签到率
     private int[] everyday_number;   //周期内每天签到次数列表
 
@@ -23,11 +25,11 @@ public class signinDetailResult {
         this.everyday_number = everyday_number;
     }
 
-    public Map<String, Map<String, List<String>>> getSign_in_detail_list() {
+    public List<SignInDetailListResult> getSign_in_detail_list() {
         return sign_in_detail_list;
     }
 
-    public void setSign_in_detail_list(Map<String, Map<String, List<String>>> sign_in_detail_list) {
+    public void setSign_in_detail_list(List<SignInDetailListResult> sign_in_detail_list) {
         this.sign_in_detail_list = sign_in_detail_list;
     }
 

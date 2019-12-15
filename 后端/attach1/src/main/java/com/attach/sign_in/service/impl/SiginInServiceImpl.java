@@ -1,9 +1,6 @@
 package com.attach.sign_in.service.impl;
 
-import com.attach.sign_in.commons.pojo.SignDetailResult;
-import com.attach.sign_in.commons.pojo.effectiveSignIn;
-import com.attach.sign_in.commons.pojo.signInResult;
-import com.attach.sign_in.commons.pojo.signinDetailResult;
+import com.attach.sign_in.commons.pojo.*;
 import com.attach.sign_in.commons.utils.GetId;
 import com.attach.sign_in.commons.utils.JsonUtils;
 import com.attach.sign_in.mapper.*;
@@ -411,8 +408,12 @@ public class SiginInServiceImpl implements SignInService {
                                         StatisticsExample statisticsExample =new StatisticsExample();
                                         statisticsExample.createCriteria().andSignInIdEqualTo(signInId).andIdEqualTo(userId);
                                         List<Statistics> statistics = statisticsMapper.selectByExample(statisticsExample);
+                                        //如果这个任务有了，就直接更新
                                         if(statistics.size()>0 && statistics!=null){
                                             Statistics statistics1=new Statistics();
+                                            //往第一个里面数据+1.
+                                            //现在这个表有问题，因为这个表没有日期，不知道，这个表时这个任务的每日签到总人数。
+                                            //不知道时第几天的，所以有待讨论。
                                             statistics1.setId(statistics.get(0).getId());
                                             statistics1.setCount(statistics.get(0).getCount()+1);
                                             statistics1.setSignInId(signInId);
@@ -423,6 +424,7 @@ public class SiginInServiceImpl implements SignInService {
                                                 return JsonUtils.objectToJson("fail");      //没有更新，在任务每日情况表中
                                             }
                                         }else{
+                                            //没有，就得插入。
                                             Statistics statistics1=new Statistics();
                                             statistics1.setCount(1);
                                             statistics1.setSignInId(signInId);
@@ -590,6 +592,8 @@ public class SiginInServiceImpl implements SignInService {
             return JsonUtils.objectToJson("fail");
         }
         signinDetailResult Result = new signinDetailResult();
+        List<SignInDetailListResult> sign_in_detail_list=new ArrayList<>();
+//        SignInDetailListResult sign_in_detail_list=new SignInDetailListResult();
         int all = 0;
         int index = 0;
         int count = 0;
@@ -615,8 +619,9 @@ public class SiginInServiceImpl implements SignInService {
             start = signIns.get(0).getStartTime();
             end = signIns.get(0).getEndTime();
         }
-        Map<String,Map<String,List<String>>> sign_in_detail_list=new HashMap<>();
-//        String[] sign_in_detail_list = new String[length];
+//        Map<String,Map<String,List<String>>> sign_in_detail_list=new HashMap<>();
+        sign_in_detail_list = new ArrayList<>();
+//                new String[length];
         UserSignInExample userSignInExample1 = new UserSignInExample();
         userSignInExample1.createCriteria().andSignInIdEqualTo(signInId);
         List<UserSignIn> userSignIn = userSignInMapper.selectByExample(userSignInExample1);
@@ -717,7 +722,12 @@ public class SiginInServiceImpl implements SignInService {
 //                sign_in_detail_list[k++]=userNameList.toString()+UnuserNameList.toString();
                 map.put("unsignInList",list2);
                 map.put("signInList",list);
-                sign_in_detail_list.put("day"+k++,map);
+//                sign_in_detail_list.put("day"+k++,map);
+                SignInDetailListResult si=new SignInDetailListResult();
+                si.setDay("day"+k++);
+                si.setSignInList(list);
+                si.setUnsignInList(list2);
+                sign_in_detail_list.add(si);
                 userNameList.clear();
                 UnuserNameList.clear();
             }
@@ -730,11 +740,14 @@ public class SiginInServiceImpl implements SignInService {
                 list2.add("[]");
                 map.put("signInList",list);
                 map.put("unsignInList",list2);
-                sign_in_detail_list.put("day"+k++,map);
+//                sign_in_detail_list.put("day"+k++,map);
+                SignInDetailListResult si=new SignInDetailListResult();
+                si.setDay("day"+k++);
+                si.setSignInList(list);
+                si.setUnsignInList(list2);
+                sign_in_detail_list.add(si);
             }
         }
-
-
         rate=((double) all/ All)*100;
         System.out.println(rate);
         AlluserIdList.removeAll(userIdList);       //从总的id中去掉签到的就是没签到的。
