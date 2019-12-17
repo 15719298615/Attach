@@ -56,6 +56,15 @@ public class TaskServiceImpl implements TaskService {
             group1.setEffective((byte) 1);
             int index = groupsMapper.insert(group1);
             if (index > 0) {
+
+                UserGroup userGroup = new UserGroup();//插入userGreoup，让他参加
+                userGroup.setUserId(userId);
+                GroupsExample groupsExample = new GroupsExample();
+                groupsExample.createCriteria().andGroupNumberEqualTo(group_number).andGroupPasswordEqualTo(group_password);
+                userGroup.setGroupId(groupsMapper.selectByExample(groupsExample).get(0).getId());
+                userGroup.setUserId(userId);
+                int insert = userGroupMapper.insert(userGroup);
+
                 CreateGroup createGroup = new CreateGroup();
                 createGroup.setStatus("success");
                 createGroup.setGroup_number(group_number);
@@ -93,6 +102,10 @@ public class TaskServiceImpl implements TaskService {
             return JsonUtils.objectToJson("fail");
         }
 
+        if(groups.get(0).getEndTime().getTime()<GetId.getNowTime().getTime()){
+            return JsonUtils.objectToJson("fail");
+        }
+
         TaskExample taskExample = new TaskExample();
         taskExample.createCriteria().andGroupIdEqualTo(groupId);
         List<Task> tasks = taskMapper.selectByExample(taskExample);
@@ -104,7 +117,7 @@ public class TaskServiceImpl implements TaskService {
         for(Task task:tasks){
             TaskIdAndName taskIdAndName = new TaskIdAndName();
             UserDayTaskExample userDayTaskExample = new UserDayTaskExample();
-            userDayTaskExample.createCriteria().andTaskIdEqualTo(task.getId()).andUserIdEqualTo(userId).andTimeEqualTo(GetId.getNowTime());
+            userDayTaskExample.createCriteria().andTaskIdEqualTo(task.getId()).andUserIdEqualTo(userId).andTimeEqualTo(GetId.getNowTime()).andCompleteEqualTo((byte)1);
             List<UserDayTask> userDayTasks = userDayTaskMapper.selectByExample(userDayTaskExample);
             if(userDayTasks!=null&&userDayTasks.size()>0){//判断今天签到状态
                 taskIdAndName.setStatus(true);
@@ -204,11 +217,16 @@ public class TaskServiceImpl implements TaskService {
                 groupsExample.createCriteria().andIdEqualTo(userGroup.getGroupId());
                 List<Groups> groups = groupsMapper.selectByExample(groupsExample);
                 if(groups!=null&&groups.size()>0){
+                    if (groups.get(0).getEndTime().getTime()<GetId.getNowTime().getTime()){
+                        continue;
+                    }
                     getMyGroup myGroup = new getMyGroup();
                     myGroup.setGroupId(groups.get(0).getId());
                     myGroup.setGroupName(groups.get(0).getGroupName());
                     myGroups.add(myGroup);
-                }else {return JsonUtils.objectToJson("fail");}
+                }else {
+                    return JsonUtils.objectToJson("fail");
+                }
             }
             return JsonUtils.objectToJson(myGroups);
         }
@@ -225,14 +243,12 @@ public class TaskServiceImpl implements TaskService {
             if(users==null||users.size()<=0){
                 return JsonUtils.objectToJson("fail");
             }
-
             TaskExample taskExample = new TaskExample();
             taskExample.createCriteria().andIdEqualTo(taskId);
             List<Task> tasks = taskMapper.selectByExample(taskExample);
             if(tasks==null||tasks.size()<=0){//验证taskId是否存在
                 return JsonUtils.objectToJson("fail");
             }
-
             GroupsExample groupsExample = new GroupsExample();
             groupsExample.createCriteria().andIdEqualTo(tasks.get(0).getGroupId());
             List<Groups> groups = groupsMapper.selectByExample(groupsExample);
@@ -242,9 +258,6 @@ public class TaskServiceImpl implements TaskService {
             if(GetId.getNowTime().getTime()>groups.get(0).getEndTime().getTime()){
                 return JsonUtils.objectToJson("fail");
             }
-
-
-
             UserDayTaskExample userDayTaskExample = new UserDayTaskExample();
             userDayTaskExample.createCriteria().andUserIdEqualTo(userId).andTaskIdEqualTo(taskId).andTimeEqualTo(GetId.getNowTime());
             List<UserDayTask> userDayTasks = userDayTaskMapper.selectByExample(userDayTaskExample);
@@ -258,7 +271,6 @@ public class TaskServiceImpl implements TaskService {
                     return JsonUtils.objectToJson("fail");
                 }
             }
-
             UserDayTask userDayTask = new UserDayTask();
             userDayTask.setTaskId(taskId);
             userDayTask.setUserId(userId);
@@ -300,7 +312,7 @@ public class TaskServiceImpl implements TaskService {
                 userDayTasks.get(0).setComplete((byte)0);
                 int index = userDayTaskMapper.updateByExample(userDayTasks.get(0), userDayTaskExample);
                 if(index>0){
-                    return "success";
+                    return JsonUtils.objectToJson("success");
                 }else {
                     return JsonUtils.objectToJson("fail");
                 }
@@ -324,7 +336,7 @@ public class TaskServiceImpl implements TaskService {
                 if(groups!=null&&groups.size()>0){
                     Double num = 0.0;
                     Double totalComplete = null;
-                    int timeDistance = GetId.getTimeDistance(groups.get(0).getStartTime(), groups.get(0).getEndTime())+1;
+                    int timeDistance = GetId.getTimeDistance(groups.get(0).getStartTime(), GetId.getNowTime())+1;
                     ArrayList<String> taskName = new ArrayList<>();
                     for(Task task:tasks){
                         taskName.add(task.getTaskName());
@@ -420,7 +432,7 @@ public class TaskServiceImpl implements TaskService {
                         List<Task> tasks = taskMapper.selectByExample(taskExample);
                         Double num = 0.0;
                         Double totalComplete = null;
-                        int timeDistance = GetId.getTimeDistance(groups.get(0).getStartTime(), groups.get(0).getEndTime())+1;
+                        int timeDistance = GetId.getTimeDistance(groups.get(0).getStartTime(), GetId.getNowTime())+1;
                         for(Task task:tasks){
                             UserDayTaskExample userDayTaskExample = new UserDayTaskExample();
                             userDayTaskExample.createCriteria().andTaskIdEqualTo(task.getId()).andCompleteEqualTo((byte)1).andUserIdEqualTo(userGroup.getUserId());

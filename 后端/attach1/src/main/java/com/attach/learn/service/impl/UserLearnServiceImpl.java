@@ -432,7 +432,7 @@ public class UserLearnServiceImpl implements UserLearnService {
         Date date = new Date();
         int index = c.get(Calendar.DAY_OF_YEAR) - count + 1;
         if (dayLearningTimes != null && dayLearningTimes.size() > 0) {
-            count = GetId.getTimeDistance(sdf.parse(dayLearningTimes.get(0).getToday()), date);
+            count = GetId.getTimeDistance(sdf.parse(dayLearningTimes.get(0).getToday()), date)+1;
             day_learned_time_list=new double [count];
 //            Date date = sdf.parse(dayLearningTimes.get(0).getToday());      //得到第一天的日期。
 //            Date date1 = GetId.addDate(date, dayLearningTimes.size());
