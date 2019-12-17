@@ -9,6 +9,7 @@ D:\java\attach1\src\main\java\com\attach\sign_in\mapper\UserMapper.java
 D:\java\attach1\src\main\java\com\attach\learn\pojo\DayLearningTimeExample.java
 D:\java\attach1\src\main\java\com\attach\learn\pojo\UserLearnExample.java
 D:\java\attach1\src\main\java\com\attach\group\pojo\UserGroup.java
+D:\java\attach1\src\main\java\com\attach\sign_in\commons\pojo\SignInDetailListResult.java
 D:\java\attach1\src\main\java\com\attach\group\commons\pojo\members.java
 D:\java\attach1\src\main\java\com\attach\learn\pojo\DayLearningTime.java
 D:\java\attach1\src\main\java\com\attach\group\mapper\UserGroupMapper.java
@@ -42,8 +43,8 @@ D:\java\attach1\src\main\java\com\attach\learn\commons\pojo\LearnResult.java
 D:\java\attach1\src\main\java\com\attach\sign_in\commons\pojo\effectiveSignIn.java
 D:\java\attach1\src\main\java\com\attach\group\pojo\Groups.java
 D:\java\attach1\src\main\java\com\attach\group\service\TaskService.java
-D:\java\attach1\src\main\java\com\attach\sign_in\commons\pojo\signinDetailResult.java
 D:\java\attach1\src\main\java\com\attach\sign_in\mapper\UserSignInMapper.java
+D:\java\attach1\src\main\java\com\attach\sign_in\commons\pojo\signinDetailResult.java
 D:\java\attach1\src\main\java\com\attach\sign_in\mapper\ParticipateMapper.java
 D:\java\attach1\src\main\java\com\attach\sign_in\pojo\Statistics.java
 D:\java\attach1\src\main\java\com\attach\group\controller\TaskController.java

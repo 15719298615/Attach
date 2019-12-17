@@ -8,8 +8,8 @@ com\attach\group\service\TaskService.class
 com\attach\sign_in\pojo\Statistics.class
 com\attach\learn\pojo\UserLearn.class
 com\attach\learn\service\impl\UserLearnServiceImpl.class
-com\attach\sign_in\pojo\StatisticsExample$Criterion.class
 com\attach\sign_in\pojo\UserExample$Criterion.class
+com\attach\sign_in\pojo\StatisticsExample$Criterion.class
 com\attach\sign_in\pojo\SignInExample$Criterion.class
 com\attach\sign_in\mapper\StatisticsMapper.class
 com\attach\group\service\impl\TaskServiceImpl.class
@@ -58,6 +58,7 @@ com\attach\sign_in\commons\pojo\signInResult.class
 com\attach\learn\pojo\UserLearnExample$Criteria.class
 com\attach\group\pojo\UserGroupExample$Criteria.class
 com\attach\learn\pojo\DayLearningTime.class
+com\attach\sign_in\commons\pojo\SignInDetailListResult.class
 com\attach\sign_in\commons\pojo\SignDetailResult.class
 com\attach\sign_in\commons\pojo\effectiveSignIn.class
 com\attach\group\commons\pojo\members.class
