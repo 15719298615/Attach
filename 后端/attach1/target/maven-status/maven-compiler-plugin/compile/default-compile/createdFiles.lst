@@ -24,6 +24,7 @@ com\attach\sign_in\mapper\UserSignInMapper.class
 com\attach\group\commons\pojo\MemberDetail.class
 com\attach\sign_in\pojo\StatisticsExample.class
 com\attach\group\pojo\GroupsExample$GeneratedCriteria.class
+com\attach\learn\commons\utils\GetId.class
 com\attach\group\mapper\TaskMapper.class
 com\attach\learn\commons\pojo\LearnResult.class
 com\attach\sign_in\commons\utils\CookieUtils.class

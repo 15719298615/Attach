@@ -1,6 +1,7 @@
 package com.attach.learn.service.impl;
 
 import com.attach.learn.commons.pojo.LearnResult;
+import com.attach.learn.commons.utils.GetId;
 import com.attach.learn.commons.utils.JsonUtils;
 import com.attach.learn.mapper.DayLearningTimeMapper;
 import com.attach.learn.mapper.UserLearnMapper;
@@ -10,7 +11,6 @@ import com.attach.learn.pojo.UserLearn;
 import com.attach.learn.pojo.UserLearnExample;
 
 import com.attach.learn.service.UserLearnService;
-import com.attach.sign_in.commons.utils.GetId;
 import com.attach.sign_in.mapper.UserMapper;
 import com.attach.sign_in.pojo.User;
 import com.attach.sign_in.pojo.UserExample;
@@ -230,173 +230,80 @@ public class UserLearnServiceImpl implements UserLearnService {
         if (userId == null) {
             return JsonUtils.objectToJson("fail");
         }
-        int value = 0;
         UserExample userExample = new UserExample();             //看有没有这个人
         userExample.createCriteria().andUserIdEqualTo(userId);
         List<User> user = userMapper.selectByExample(userExample);
         if (user == null || user.size() <= 0) {
             return JsonUtils.objectToJson("fail");
         }
-        UserExample userExample1 = new UserExample();
-        List<User> users = userMapper.selectByExample(userExample);
-        if (users.size() > 0 && users != null) {
-            value = users.size();     //user用户的个数,多少个用户
-        }
-        //得到这周之前一周的日期。
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyy-MM-dd");
-        Date now = new Date();
-        Calendar c = Calendar.getInstance();
-        int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);    //1是周日
-        // 今天是一周中的第几天
-        if (c.getFirstDayOfWeek() == Calendar.SUNDAY) {
-            c.add(Calendar.DAY_OF_MONTH, 1);
-        }
-        // 计算一周前开始的日期
-//            c.add(Calendar.DAY_OF_MONTH, -dayOfWeek);    //得到这周刚开始的日期。
-        c.add(Calendar.DAY_OF_MONTH, -7);       //不是-7，而是-6，因为要是-7连今天算着就会8天。
-//        for (int i = 1; i < dayOfWeek; i++) {
-//            c.add(Calendar.DAY_OF_MONTH, 1);
-//        }
-        //初始化
-        LearnResult learnResult = new LearnResult();
-        double[] day_learned_time_list = null;
+        //获取一周前的时间
+        Date ago7 = GetId.getPastDate(7);
+        double[] day_learned_time_list = new double[7];
         double week_total_learn_time = 0.0;
-        double average_learned_time = 0.0;
+        for (int i=6;i>=0;i--){
+            //获取今天和七天前的学习
+            DayLearningTimeExample dayLearningTimeExample = new DayLearningTimeExample();
+            dayLearningTimeExample.createCriteria().andUserIdEqualTo(userId).andTodayEqualTo(GetId.getPastDateString(GetId.getPastDate(i+1)));
+            List<DayLearningTime> dayLearningTime = dayLearningTimeMapper.selectByExample(dayLearningTimeExample);
+            if (dayLearningTime!=null&&dayLearningTime.size()>0){
+                //计算本周每天对应的学习时间列表
+                day_learned_time_list[i] = dayLearningTime.get(0).getTime()/3600.0;
+                //本周学习总时间
+                week_total_learn_time += dayLearningTime.get(0).getTime()/3600.0;
+            }else {
+                continue;
+            }
+        }
+
+        //平均学习时间
+        double average_learned_time = week_total_learn_time/7;
+        //打败人数百分比
         double beat_people_percent = 0.0;
-        int count = 0;
-        int index = 0;
-        int all = 0;
-        long time1 = 0;
-        DayLearningTimeExample dayLearningTimeExample = new DayLearningTimeExample();
-        dayLearningTimeExample.createCriteria().andUserIdEqualTo(userId);
-        List<DayLearningTime> dayLearningTimes = dayLearningTimeMapper.selectByExample(dayLearningTimeExample);
-        if (dayLearningTimes != null && dayLearningTimes.size() > 0) {
-//            time1 = dayLearningTimes.get(dayLearningTimes.size()).getTime()/1000;    //最后一次的时间
-            Date date = sdf.parse(dayLearningTimes.get(dayLearningTimes.size() - 1).getToday());
-            time1 = date.getTime() / 1000;      //最后一次每天学习时间这一天的时间
-        }
-        long r = 0;     //最后一次之前一周的,初始化,一周是604800s
-        String start = dayLearningTimes.get(0).getToday();
-        //得到第一天的时间，进行比较，是否在一周前注册。
-        if (sdf.parse(start).getTime() / 1000 < c.getTimeInMillis() / 1000) {
-            //calendar本身就是一周前的，如果第一次的时间比一周前的还小，说明自己在一周前已经开始了学习，只要判断这一周内的即可。
-            r = time1 - 604800;
-            day_learned_time_list = new double[7];
-        } else {
-            //如果比一周前的大，说明在这周才开始进行学习的，直接从第一天开始判断即可。
-            r = sdf.parse(start).getTime() / 1000;
-            day_learned_time_list = new double[dayLearningTimes.size()];
-        }
-        if (dayLearningTimes != null && dayLearningTimes.size() > 0) {
-            for (DayLearningTime d : dayLearningTimes) {
-                String today = d.getToday();
-                long l = sdf.parse(today).getTime() / 1000;
-                if (l < r) {   //如果比一周前或者刚开始日期还要小就继续寻找
-                    continue;
-                }
-                if (l >= r && l <= time1) {       //这一周内的
-                    System.out.println("aaa");
-//                    day_learned_time_list[count++] = d.getTime();     //存放时间
-                    int p = 0;
-                    //从第一天开始遍历length天，那天和取得的day相同就放在那天，其他的便是0了
-                    for (int i = 0; i < day_learned_time_list.length; i++) {
-                        Date da = c.getTime();              //c是一周前的日期。
-                        String da1 = sdf.format(da);        //一周前日期的时间。
-                        String da2 = d.getToday();          //从学习表中遍历的时间，
-                        if (da1.equals(da2)) {        //同一天
-                            System.out.println("bbb");
-                            day_learned_time_list[i] = (double)d.getTime() / 3600;        //转换为小时。
-                            week_total_learn_time += (double)d.getTime()/3600;
-                        }
-                        c.add(Calendar.DAY_OF_MONTH, 1);
-                        p++;
-//           if((date.getTime()/1000)==(sdf.parse(d.getToday()).getTime()/1000)){       //不能够判断是同一天,两个秒肯定不一样
-                    }
-                    c.add(Calendar.DAY_OF_MONTH, -p);
-                }
-            }
-            average_learned_time = ((double) week_total_learn_time / day_learned_time_list.length);
-        }
-        //求打败人数百分比
-        int number = 0;
-        boolean flag;
-        Integer[] UserId = new Integer[value];
-        DayLearningTimeExample dayLearningTimeExample2 = new DayLearningTimeExample();
-        List<DayLearningTime> dayLearningTimes1 = dayLearningTimeMapper.selectByExample(dayLearningTimeExample2);
-        if (dayLearningTimes1 != null && dayLearningTimes1.size() > 0) {
-            //得到所有的userid
-            for (DayLearningTime d : dayLearningTimes1) {
-                flag = true;        //每次将标志位重置.
-                if (number < value) {
-                    Integer userId1 = d.getUserId();     //得到每一个userid，和数组UserId进行比较，是否有重复的id
-                    for (int i = 0; i <= number; i++) {         //只遍历有的，可以减少次数。
-                        if (i == userId1) {     //如果重复，将标志位置为false；
-                            flag = false;
-                        }
-                    }
-//                    for (Integer i : UserId) {        //要遍历所有，次数比较多.
-//                    }
-                    if (flag) {     //判断标志位，看是否重复。
-                        UserId[number] = userId1;
-                        number++;
-                    }
-                }
-            }
-        }
-        //求所有人的平均时间
-        int n = 0;
-        int xlength = 0;
-        Double[] allIdRate = new Double[number];
-        for (Integer i : UserId) {
-            if (i != null) {
-                DayLearningTimeExample dayLearningTimeExample3 = new DayLearningTimeExample();
-                dayLearningTimeExample3.createCriteria().andUserIdEqualTo(i);
-                List<DayLearningTime> dayLearningTimes2 = dayLearningTimeMapper.selectByExample(dayLearningTimeExample3);
-                if (sdf.parse(dayLearningTimes2.get(0).getToday()).getTime() / 1000 < c.getTimeInMillis() / 1000) {
-                    xlength = 7;
-                } else {
-                    xlength = GetId.getTimeDistance(sdf.parse(dayLearningTimes2.get(0).getToday()),
-                            sdf.parse(dayLearningTimes2.get(dayLearningTimes2.size() - 1).getToday()));
-                }
-                int total = 0;
-                for (DayLearningTime d : dayLearningTimes) {
-                    String today = d.getToday();
-                    Integer time = d.getTime();
-//                    total += time;
-                    long l = sdf.parse(today).getTime() / 1000;
-                    if (l < r) {
+        int people = 0;
+        UserExample userExample1 = new UserExample();
+        List<User> users = userMapper.selectByExample(userExample1);
+        people = users.size();     //user用户的个数,多少个用户
+        if (user.size()<=0){
+            beat_people_percent = 1;
+        }else {
+            //所有人学习时间
+            double[] allpeople = new double[people];
+            int u = 0;
+            for (User alluser : users) {
+                double time = 0;
+                for (int i = 7; i > 0; i--) {
+                    //获取今天和七天前的学习
+                    DayLearningTimeExample dayLearningTimeExample1 = new DayLearningTimeExample();
+                    dayLearningTimeExample1.createCriteria().andUserIdEqualTo(alluser.getUserId()).andTodayEqualTo(GetId.getPastDateString(GetId.getPastDate(i)));
+                    List<DayLearningTime> dayLearningTime = dayLearningTimeMapper.selectByExample(dayLearningTimeExample1);
+                    if (dayLearningTime != null && dayLearningTime.size() > 0) {
+                        time += dayLearningTime.get(0).getTime() / 3600.0;
+                    } else {
                         continue;
                     }
-                    if (l > r && l < time1) {       //这一周内的
-                        total += (double)d.getTime() / 3600;
-                    }
                 }
-                allIdRate[n++] = (double)total;             //每个人这周的所有时间。比较每个人的所有学习时间
-//                allIdRate[n++] = ((double) total / (double) xlength);    //每个人的平均学习时间是总共的除以这一周的天数
+                allpeople[u] = time;
+                u++;
             }
-        }
-        //求打败百分比
-        int many = 0;
-        if (allIdRate != null && allIdRate.length > 0) {        //有其他人
-            for (Double d : allIdRate) {
-                if (week_total_learn_time == 0.0) {
-                    beat_people_percent = 0.0;
+
+            //打败的人数
+            int beat = 1;
+            for (int i = 0; i < allpeople.length; i++) {
+                if (week_total_learn_time > allpeople[i]) {
+                    beat++;
                 } else {
-                    if (week_total_learn_time > d) {
-                        many++;
-                    }
+                    continue;
                 }
             }
-            beat_people_percent = ((double) many / (double) (allIdRate.length)) * 100;
-        } else {      //没有其他人，只有一个人。
-            beat_people_percent = 100.0;
+            beat_people_percent = (double) beat / people;
         }
-        //往结果里面存放数据。
-        learnResult.setAverage_learned_time(average_learned_time);
-        learnResult.setBeat_people_percent(beat_people_percent);
+        LearnResult learnResult = new LearnResult();
         learnResult.setDay_learned_time_list(day_learned_time_list);
         learnResult.setTotal_learned(week_total_learn_time);
+        learnResult.setAverage_learned_time(average_learned_time);
+        learnResult.setBeat_people_percent(beat_people_percent);
+
         return JsonUtils.objectToJson(learnResult);
     }
 

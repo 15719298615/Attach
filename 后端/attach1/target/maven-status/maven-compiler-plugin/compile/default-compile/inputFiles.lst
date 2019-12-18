@@ -23,6 +23,7 @@ D:\java\attach1\src\main\java\com\attach\learn\mapper\DayLearningTimeMapper.java
 D:\java\attach1\src\main\java\com\attach\sign_in\controller\UserController.java
 D:\java\attach1\src\main\java\com\attach\sign_in\controller\SignInController.java
 D:\java\attach1\src\main\java\com\attach\sign_in\mapper\SignInMapper.java
+D:\java\attach1\src\main\java\com\attach\learn\commons\utils\GetId.java
 D:\java\attach1\src\main\java\com\attach\group\commons\utils\JsonUtils.java
 D:\java\attach1\src\main\java\com\attach\sign_in\pojo\SignInExample.java
 D:\java\attach1\src\main\java\com\attach\group\commons\pojo\TaskIdAndName.java
