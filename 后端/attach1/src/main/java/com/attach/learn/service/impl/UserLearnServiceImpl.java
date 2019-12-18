@@ -296,6 +296,7 @@ public class UserLearnServiceImpl implements UserLearnService {
                     continue;
                 }
                 if (l >= r && l <= time1) {       //这一周内的
+                    System.out.println("aaa");
 //                    day_learned_time_list[count++] = d.getTime();     //存放时间
                     int p = 0;
                     //从第一天开始遍历length天，那天和取得的day相同就放在那天，其他的便是0了
@@ -304,6 +305,7 @@ public class UserLearnServiceImpl implements UserLearnService {
                         String da1 = sdf.format(da);        //一周前日期的时间。
                         String da2 = d.getToday();          //从学习表中遍历的时间，
                         if (da1.equals(da2)) {        //同一天
+                            System.out.println("bbb");
                             day_learned_time_list[i] = (double)d.getTime() / 3600;        //转换为小时。
                             week_total_learn_time += (double)d.getTime()/3600;
                         }
